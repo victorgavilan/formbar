@@ -1,0 +1,20 @@
+{
+  "name": "formbar",
+  "version": "1.0.0",
+  "description": "Simple form progress bar with multiple effects.",
+  "main": "formbar.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "form",
+    "progress",
+    "bar"
+  ],
+  "author": "Victor Gavilán",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-uglify": "^0.10.1"
+  }
+}
