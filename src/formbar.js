@@ -122,7 +122,7 @@ FormBar.prototype.getPercentage = function(){
     var percentFilled = this.getCompletePercentage();
 
     //If it isn't a multistep form return the completed percentage without transform it
-    if (this.totalSteps <= 1) return percentFilled; 
+    if (this.totalSteps <= 1) return percentFilled * 100; 
 
     var percentStep =   1 / this.totalSteps, //Step percentage
     adaptedPercentage = percentFilled * percentStep, //Actual form percentage adapted to global multistep percentage
