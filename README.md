@@ -29,7 +29,7 @@ Insert `formbar-min.js` in your web page.  Define the DOM element that will host
 
 If you want to exclude a field add a class named `ignore` to it. 
 
-To keep formbar filesize small (>4k) `frombar-min.js` file only ships the **solid plugin**. To use another plugin insert **formbar-[pluginName]-min.js** file instead that contains **solid plugin** and the selected plugin. But if you think that you need all the plugins in your page then insert **formbar-all-min.js** file.
+To keep formbar filesize small (>4k) `formbar-min.js` file only ships the **solid plugin**. To use another plugin insert **formbar-[pluginName]-min.js** file instead that contains **solid plugin** and the selected plugin. But if you think that you need all the plugins in your page then insert **formbar-all-min.js** file.
 
 ##Configuration
 FormBar have many configuration options that makes easier fits it to your web page design. All this configuration options are accesible through your formBar object too.
@@ -42,11 +42,12 @@ FormBar have many configuration options that makes easier fits it to your web pa
         currentStep: 1
       });
       
-      myBar.render();
-
       //Access to configuration properties
       myBar.colors = ['#0FF', '#F0F']; 
       myBar.currentStep = 2;
+      
+      myBar.render();
+     
  ```
 
 * **node:** (CSS Selector) DOM node where the bar will be redered.
