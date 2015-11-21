@@ -1,6 +1,9 @@
 module.exports = function( grunt ){
 
   grunt.initConfig({
+    clean: {
+    	dist: ['dist']
+    },
     uglify: {
       formbar: {
         src: ['src/formbar.js'],
@@ -14,22 +17,41 @@ module.exports = function( grunt ){
           dest: 'dist/plugins/',
           ext: '-min.js'
         }]
-      },
-      mixedPlugins: {
-        files: [
-          { src: ['src/formbar.js','chameleon-plugin.js'], dest: 'dist/formbar-chameleon-min.js'},
-          { src: ['src/formbar.js','dashed-plugin.js'], dest: 'dist/formbar-dashed-min.js' },
-          { src: ['src/formbar.js','dotted-plugin.js'], dest: 'dist/formbar-dotted-min.js' },
-          { src: ['src/formbar.js','gradient-plugin.js'], dest: 'dist/formbar-gradient-min.js' },
-          { src: ['src/formbar.js','merge-plugin.js'], dest: 'dist/formbar-merge-min.js' },
-          { src: ['src/formbar.js','sections-plugin.js'], dest: 'dist/formbar-sections-min.js' }
-        ]
       }
- 
+    },
+    concat: {
+       options: {
+       	separator: ';'
+       },
+       mixedPlugins: {
+        files: [
+          { src: ['dist/formbar-min.js','dist/plugins/chameleon-plugin-min.js'], dest: 'dist/formbar-chameleon-min.js'},
+          { src: ['dist/formbar-min.js','dist/plugins/dashed-plugin-min.js'], dest: 'dist/formbar-dashed-min.js' },
+          { src: ['dist/formbar-min.js','dist/plugins/dotted-plugin-min.js'], dest: 'dist/formbar-dotted-min.js' },
+          { src: ['dist/formbar-min.js','dist/plugins/gradient-plugin-min.js'], dest: 'dist/formbar-gradient-min.js' },
+          { src: ['dist/formbar-min.js','dist/plugins/merge-plugin-min.js'], dest: 'dist/formbar-merge-min.js' },
+          { src: ['dist/formbar-min.js','dist/plugins/sections-plugin-min.js'], dest: 'dist/formbar-sections-min.js' }
+        ]
+      },
+      allPlugins: {
+        files: [{
+          src: [
+          'dist/formbar-chameleon-min.js',
+          'dist/formbar-dashed-min.js',
+          'dist/formbar-dotted-min.js',
+          'dist/formbar-gradient-min.js',
+          'dist/formbar-merge-min.js',
+          'dist/formbar-sections-min.js'
+          ],        
+          dest: 'dist/formbar-all-min.js'
+        }]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
-
-  grunt.registerTask('default', ['uglify']);
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-clean'); 
+  
+  grunt.registerTask('default', ['uglify', 'concat']);
 }

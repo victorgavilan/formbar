@@ -9,6 +9,9 @@ function FormBar( cfg ){
         return; 
     }
 
+    //methods
+    this.nextStep = function() { this.currentStep += 1; }
+
     //callbacks
     this.onComplete = cfg.onComplete;
     this.onChange = cfg.onChange;
@@ -21,7 +24,7 @@ function FormBar( cfg ){
 
     //Multistep form configuration
     this.totalSteps = cfg.totalSteps || 1;
-    this.actualStep = cfg.actualStep || 1;
+    this.currentStep = cfg.currentStep || 1;
 
     //Bar border configuration
     this.borderColor = cfg.borderColor || '#bbb'; 
@@ -33,15 +36,13 @@ function FormBar( cfg ){
     this.textSize = cfg.textSize || '1em';
     if (typeof this.textSize == 'number') this.textSize += 'px';
 
-    //Bar html node reference
-    this.barNode = null;
-
     //Bar height configuration
     //Allow define the bar height by a number (translate it to pixels) or by a string (using any CSS unit)
     if (cfg.barHeight && typeof cfg.barHeight === "number") cfg.barHeight +="px"; 
     this.barHeight = cfg.barHeight || '4px';
 
     //Internal use variables
+    this._barNode = null; //Bar html node reference
     this._currentPercentage = null;
     this._currentTextColor = this.textColors[0];
     this._formElements = [];
@@ -90,8 +91,8 @@ FormBar.prototype.destroy = function(){
 */
 
 FormBar.prototype.getBar = function(){
-  if ( !this.barNode ) this.barNode = this.node.querySelector(".fpbar");
-	return this.barNode;  
+  if ( !this._barNode ) this._barNode = this.node.querySelector(".fpbar");
+	return this._barNode;  
 }
 
 
@@ -125,7 +126,7 @@ FormBar.prototype.getPercentage = function(){
 
     var percentStep =   1 / this.totalSteps, //Step percentage
     adaptedPercentage = percentFilled * percentStep, //Actual form percentage adapted to global multistep percentage
-    completeStepsPercentage = ( (this.actualStep - 1) * percentStep );
+    completeStepsPercentage = ( (this.currentStep - 1) * percentStep );
  
    return ( completeStepsPercentage + adaptedPercentage ) * 100;   
 }

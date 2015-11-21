@@ -6,14 +6,22 @@ FormBar.plugins.chameleon = {
        
         bar.style.background = this.colors[0];
     },
-    update: function() {
+    update: function chameleonUpdate() {
+
+      chameleonUpdate._currentColor = null;
         
       var bar = this.getBar(),
           percentage = this.getPercentage(),
-          bgColor = (percentage === 0 ) ? 0 : Math.round( ( (percentage/100) * this.colors.length ) - 1 );
+          indexColor = (percentage === 0 ) ? 0 : Math.round( ( (percentage/100) * this.colors.length ) - 1 );
 
           bar.style.width = percentage + "%";
-          bar.style.background = this.colors[ bgColor ];
+          
+          //Only update if there is a color change
+          if (chameleonUpdate._currentColor != indexColor ) {
+	          chameleonUpdate._currentColor = indexColor;
+  	        bar.style.background = this.colors[ bgColor ];
+          }
     }
 }
+
 
