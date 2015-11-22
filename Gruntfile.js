@@ -36,22 +36,30 @@ module.exports = function( grunt ){
       allPlugins: {
         files: [{
           src: [
-          'dist/formbar-chameleon-min.js',
-          'dist/formbar-dashed-min.js',
-          'dist/formbar-dotted-min.js',
-          'dist/formbar-gradient-min.js',
-          'dist/formbar-merge-min.js',
-          'dist/formbar-sections-min.js'
+          'dist/formbar-min.js',
+          'dist/plugins/chameleon-plugin-min.js',
+          'dist/plugins/dashed-plugin-min.js',
+          'dist/plugins/dotted-plugin-min.js',
+          'dist/plugins/gradient-plugin-min.js', 
+          'dist/plugins/merge-plugin-min.js',          
+          'dist/plugins/sections-plugin-min.js'
           ],        
           dest: 'dist/formbar-all-min.js'
         }]
+      }      
+    },
+    copy: {
+      example: {
+      	src: 'dist/formbar-all-min.js',
+      	dest: 'examples/formbar-all-min.js'
       }
-    }
+  	}
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-clean'); 
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy'); 
   
-  grunt.registerTask('default', ['uglify', 'concat']);
+  grunt.registerTask('default', ['uglify', 'concat', 'copy']);
 }

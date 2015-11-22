@@ -54,7 +54,7 @@ FormBar have many configuration options that makes easier fits it to your web pa
 * **formNode:** (CSS Selector) Form DOM node container. (default: 'body' - observes all page forms fields)
 * **barHeight:** (CSS height unit) Bar height. You can pass a string with a CSS height unit or a number. If you pass a number it will represent the height in pixels.
 * **colors:** (Array of CSS colors) Example: `['#F00', '#0F0','#0FF']`. This colors are share by all plugins, see below the configuration of each plugin to know how it use this colors.
-
+* **background:** (CSS background) A color or background CSS value. Sets de bar's background.
 
 ###Bar border options
  
@@ -64,6 +64,7 @@ FormBar have many configuration options that makes easier fits it to your web pa
 ###Bar text options
 * **showText:** (Boolean value) Show/Hide the percentage number in the bar.
 * **textSize:** (CSS size) Text size. If you pass a number it will represent the size in pixels. 
+* **textTop:** (CSS size) Text top position. If you pass a number it will represent the value in pixels. 
 * **textColors:** (CSS Color) Text color.
 
 ###MultiStep forms

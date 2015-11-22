@@ -35,11 +35,16 @@ function FormBar( cfg ){
     this.textColors = cfg.textColors || ['black', 'white']; //-50% +50% colors
     this.textSize = cfg.textSize || '1em';
     if (typeof this.textSize == 'number') this.textSize += 'px';
-
+    this.textTop = cfg.textTop || '5px';
+    if (typeof this.textTop == 'number') this.textTop += 'px';
+    
     //Bar height configuration
     //Allow define the bar height by a number (translate it to pixels) or by a string (using any CSS unit)
     if (cfg.barHeight && typeof cfg.barHeight === "number") cfg.barHeight +="px"; 
     this.barHeight = cfg.barHeight || '4px';
+    
+    //Bar background color
+    this.node.style.background = cfg.background || 'transparent';
 
     //Internal use variables
     this._barNode = null; //Bar html node reference
@@ -122,13 +127,13 @@ FormBar.prototype.getPercentage = function(){
     var percentFilled = this.getCompletePercentage();
 
     //If it isn't a multistep form return the completed percentage without transform it
-    if (this.totalSteps <= 1) return percentFilled * 100; 
+    if (this.totalSteps <= 1) return Math.round( percentFilled  * 100 ); 
 
     var percentStep =   1 / this.totalSteps, //Step percentage
     adaptedPercentage = percentFilled * percentStep, //Actual form percentage adapted to global multistep percentage
     completeStepsPercentage = ( (this.currentStep - 1) * percentStep );
  
-   return ( completeStepsPercentage + adaptedPercentage ) * 100;   
+   return Math.round( completeStepsPercentage + adaptedPercentage  * 100 );   
 }
 
 /**
@@ -221,7 +226,7 @@ FormBar.prototype.render = function() {
     //Allow to pass a function or a string to generate the html content. 
     //The function must return an html string.
     var content = '',
-        text = (this.showText) ? '<span class="text" style="position: absolute; font-weight: bold; display:block; left: 0px; top: 0px; text-align: center; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '',
+        text = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; top:'+ this.textTop +'; font-weight: bold; display:block; left: 0px; text-align: center; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '',
         html;
  
     if (this.content) {
@@ -272,7 +277,7 @@ FormBar.util.hasClass = function( element, className ){
 */
 FormBar.util.allowedField = function( field ){
     var type = field.type;
-    return ( type != "button" && type != "submit" && type != "hidden" && (!FormBar.util.hasClass(field, 'ignore')) )
+    return ( type != "button" && type != "submit" && type != "checkbox" && type != "hidden" && (!FormBar.util.hasClass(field, 'ignore')) )
 };
 
 
