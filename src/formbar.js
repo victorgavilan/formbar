@@ -10,7 +10,8 @@ function FormBar( cfg ){
     }
 
     //methods
-    this.nextStep = function() { this.currentStep += 1; }
+    this.nextStep = function() { this.currentStep++; }
+    this.prevStep =  function() { this.currentStep--; }
 
     //callbacks
     this.onComplete = cfg.onComplete;
@@ -50,42 +51,26 @@ function FormBar( cfg ){
     this._barNode = null; //Bar html node reference
     this._currentPercentage = null;
     this._currentTextColor = this.textColors[0];
-    this._formElements = [];
-    this._formBar = cfg.formBar || true; //Set if the bar must work as a form progress bar or as a simple progress bar.
     
     //Set the bar plugin
     var plugin = cfg.plugin || 'solid';
     this.setPlugin( plugin );
 
-    //Form progress bar behavior initialization
-    if ( this._formBar ){
-        //Initialize attach events
-        this.formNode.addEventListener( "input", this );
-
-        //Get the input elements to control
-        var elems = this.formNode.querySelectorAll("input, textarea, select");
-
-        for (var j = 0; j < elems.length; j++) {
-         
-            if ( FormBar.util.allowedField( elems[j] ) ) {
-                this._formElements.push( elems[j] );
-            }
-        }
-    }
-
+    //Set the behavior and init it
+    var behavior = cfg.behavior || 'formbar'
+    if ( behavior ) this.setBehavior( behavior);
+    this.initBehavior();
+  
 };
 
 
 /**
-    Destroy the bar from the DOM and remove the event listeners.
+    Destroy the bar from the DOM and call behaviorDestroy method
     @method destroy
 */
 FormBar.prototype.destroy = function(){
-
-    if ( this._formBar ){
-        this.formNode.removeEventListener( "input", this );
-    }
-
+		this.destroyPlugin();
+    this.destroyBehavior();
     this.node.removeChild( this.node.firstChild );
 }
 
@@ -102,21 +87,6 @@ FormBar.prototype.getBar = function(){
 
 
 /**
-    Return the completed percentage this method must be overwritten if you use the bar as a simple progress bar.
-    @method getCompletePercentage
-    @return Completed percentage.
-*/
-
-FormBar.prototype.getCompletePercentage = function(){
-    var Filled = 0;    
-    for (var i = 0; i < this._formElements.length; i++) {
-        if (this._formElements[i].value.length) Filled++
-    }
-
-    return Filled / this._formElements.length; 
-}
-
-/**
     Return the percentage and transform it if is a multistep form
     @method getPercentage
     @return percentage adapted to multisteps forms.
@@ -124,7 +94,7 @@ FormBar.prototype.getCompletePercentage = function(){
 
 FormBar.prototype.getPercentage = function(){
 
-    var percentFilled = this.getCompletePercentage();
+    var percentFilled = this.getBehaviorPercentage();
 
     //If it isn't a multistep form return the completed percentage without transform it
     if (this.totalSteps <= 1) return Math.round( percentFilled  * 100 ); 
@@ -140,29 +110,49 @@ FormBar.prototype.getPercentage = function(){
     Handle the input event to update the bar
     @method handleEvent
 */
-FormBar.prototype.handleEvent = function(ev){
+FormBar.prototype.handleEvent = 
 
-    if ( FormBar.util.allowedField( ev.target ) ) {
-        this._update();
-    }
-};
+
 
 /**
     Set the plugin to use to draw the bar
     @method setPlugin
 */
 FormBar.prototype.setPlugin = function (pluginName){
-
+	
     pluginName = pluginName.toLowerCase();
 
     if ( pluginName in FormBar.plugins ){
-         this.content = (FormBar.plugins[ pluginName ].content) ? FormBar.plugins[ pluginName ].content : null;
-         this.initPlugin = (FormBar.plugins[ pluginName ].init) ? FormBar.plugins[ pluginName ].init : null;		
-         this.updatePlugin = (FormBar.plugins[ pluginName ].update) ? FormBar.plugins[ pluginName ].update : null;
+				//Destroy phase previous plugin
+				this.destroyPlugin(); 
+				//Load new plugin
+        this.contentPlugin = (FormBar.plugins[ pluginName ].content) ? FormBar.plugins[ pluginName ].content : null;
+        this.initPlugin = (FormBar.plugins[ pluginName ].init) ? FormBar.plugins[ pluginName ].init : FormBar.plugins.solid.init; //default init		
+        this.updatePlugin = (FormBar.plugins[ pluginName ].update) ? FormBar.plugins[ pluginName ].update : FormBar.plugins.solid.update; //default update
+        this.destroyPlugin = (FormBar.plugins[ pluginName ].destroy) ? FormBar.plugins[ pluginName ].destroy : FormBar.util.noop;
     } else {
-        console.log('There is not any \"'+ pluginName +'\"plugin registered'); 
+        console.log('There is not any \"'+ pluginName +'\" plugin registered'); 
     }
 }
+
+
+/**
+    Set bar behavior
+    @method setBehavior
+*/
+FormBar.prototype.setBehavior = function (behaviorName){
+
+    behaviorName = behaviorName.toLowerCase();
+
+    if ( behaviorName in FormBar.behaviors ){
+         this.initBehavior = (FormBar.behaviors[ behaviorName ].init ) ? FormBar.behaviors[ behaviorName ].init : FormBar.util.noop;
+         this.destroyBehavior = (FormBar.behaviors[ behaviorName ].destroy) ? FormBar.behaviors[ behaviorName ].destroy : FormBar.util.noop;
+         this.getBehaviorPercentage = (FormBar.behaviors[ behaviorName ].percentage) ? FormBar.behaviors[ behaviorName ].percentage : FormBar.util.noop;		
+    } else {
+        console.log('There is not any \"'+ behaviorName +'\" behavior registered'); 
+    }
+}
+
 
 
 /**
@@ -180,13 +170,9 @@ FormBar.prototype._update = function() {
     } else {
     	this._currentPercentage = percentage;
     }
+    
+    this.updatePlugin( {bar: bar, percentage: percentage} );
 
-    //Default action 
-    if (!this.updatePlugin) {
-        bar.style.width = percentage + "%";
-    } else {
-        this.updatePlugin();
-    }
 
     //Change text color if percentage > 50
     if (this.showText) {
@@ -229,11 +215,11 @@ FormBar.prototype.render = function() {
         text = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; top:'+ this.textTop +'; font-weight: bold; display:block; left: 0px; text-align: center; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '',
         html;
  
-    if (this.content) {
+    if (this.contentPlugin) {
         if (typeof this.content === "function") {
-            content = this.content();
+            content = this.contentPlugin();
         } else {
-            content = this.content;       
+            content = this.contentPlugin;       
         }
     }
 
@@ -244,14 +230,17 @@ FormBar.prototype.render = function() {
     this.node.innerHTML = html;
 
     //Do de initialization
-    if (this.initPlugin) this.initPlugin();
+    this.initPlugin();
 
     //Update the plugin state
     this._update();
 }
 
 
-//Utility methods namespace
+
+/***************
+ ** UTILITIES **
+ ***************/
 FormBar.util = {};
 
 /**
@@ -280,18 +269,98 @@ FormBar.util.allowedField = function( field ){
     return ( type != "button" && type != "submit" && type != "checkbox" && type != "hidden" && (!FormBar.util.hasClass(field, 'ignore')) )
 };
 
+// No operation
+FormBar.util.noop = function(){};
 
-/** PLUGINS **/
+
+/*************
+ ** PLUGINS **
+ *************/
 FormBar.plugins = new Object();
 
 /** SOLID PLUGIN **/
 FormBar.plugins.solid = {
     init: function(){
-
-        //Set color of bar as solid
-        var bar = this.getBar();
-        
-        bar.style.background = this.colors[0];        
+      //Set color of bar as solid
+      var bar = this.getBar();      
+      bar.style.background = this.colors[0];        
+    },
+    update: function( ev ){
+        ev.bar.style.width = ev.percentage + "%";
     }
 }
+
+
+
+/***************
+ ** BEHAVIORS **
+ ***************/
+
+FormBar.behaviors = new Object();
+
+/** FORM BAR BEHAVIOR **/
+FormBar.behaviors.formbar = {
+    init: function(){
+
+       this._formElements = [];
+       
+       //Event handler
+       this.handleEvent = function(ev){
+					if ( FormBar.util.allowedField( ev.target ) ) {
+        		this._update();
+    			}
+			 };        
+				
+       //Initialize attach events
+       this.formNode.addEventListener( "input", this );
+
+       //Get the input elements to control
+       var elems = this.formNode.querySelectorAll("input, textarea, select");
+
+       for (var j = 0; j < elems.length; j++) {
+         
+           if ( FormBar.util.allowedField( elems[j] ) ) {
+               this._formElements.push( elems[j] );
+           }
+       }
+    },
+    destroy: function(){
+        this.formNode.removeEventListener( "input", this );
+        delete this._formElements;
+        delete this.handleEvent();
+    },
+    percentage: function(){
+        var Filled = 0;    
+        for (var i = 0; i < this._formElements.length; i++) {
+            if (this._formElements[i].value.length) Filled++
+        }
+
+        return Filled / this._formElements.length; 
+    }
+}
+
+
+/** PROGRESSBAR BEHAVIOR **/
+
+FormBar.behaviors.progressbar = {
+    init: function(){},
+    destroy: function(){},
+    percentage: function(){}
+}
+
+
+/************************
+ ** EXTENSIONS METHODS **
+ ************************/
+
+//Plugin API
+FormBar.prototype.destroyPlugin = FormBar.util.noop;
+FormBar.prototype.initPlugin = FormBar.plugins.solid.init;
+FormBar.prototype.contentPlugin = null;
+FormBar.prototype.updatePlugin = FormBar.plugins.solid.update;
+
+//Behavior API
+FormBar.prototype.initBehavior = FormBar.util.noop;
+FormBar.prototype.destroyBehavior = FormBar.util.noop;
+FormBar.prototype.getBehaviorPercentage = FormBar.util.noop;		
 

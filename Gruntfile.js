@@ -53,13 +53,20 @@ module.exports = function( grunt ){
       	src: 'dist/formbar-all-min.js',
       	dest: 'examples/formbar-all-min.js'
       }
-  	}
+  	},
+  	watch: {
+			scripts: {
+				files: '**/*.js',
+				tasks: ['default'],
+			}
+		}
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy'); 
+  grunt.loadNpmTasks('grunt-contrib-watch');
   
   grunt.registerTask('default', ['uglify', 'concat', 'copy']);
 }
