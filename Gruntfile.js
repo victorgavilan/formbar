@@ -12,8 +12,8 @@ module.exports = function( grunt ){
       formbarPlugins: {
         files: [{
           expand: true,
-          cwd: 'src/',
-          src: ['*-plugin.js'],        
+          cwd: 'src/plugins/',
+          src: ['*.js'],        
           dest: 'dist/plugins/',
           ext: '-min.js'
         }]

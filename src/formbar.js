@@ -33,6 +33,9 @@ function FormBar( cfg ){
 
     //Bar text configuration
     this.showText = cfg.showText || false;
+    this.textPendingPercentage = cfg.textPendingPercentage || false
+    this.beforeText = cfg.beforeText || '';
+    this.afterText = cfg.afterText ||'';
     this.textColors = cfg.textColors || ['black', 'white']; //-50% +50% colors
     this.textSize = cfg.textSize || '1em';
     if (typeof this.textSize == 'number') this.textSize += 'px';
@@ -123,9 +126,9 @@ FormBar.prototype.setPlugin = function (pluginName){
     pluginName = pluginName.toLowerCase();
 
     if ( pluginName in FormBar.plugins ){
-				//Destroy phase previous plugin
-				this.destroyPlugin(); 
-				//Load new plugin
+        //Destroy phase previous plugin
+        this.destroyPlugin(); 
+        //Load new plugin
         this.contentPlugin = (FormBar.plugins[ pluginName ].content) ? FormBar.plugins[ pluginName ].content : null;
         this.initPlugin = (FormBar.plugins[ pluginName ].init) ? FormBar.plugins[ pluginName ].init : FormBar.plugins.solid.init; //default init		
         this.updatePlugin = (FormBar.plugins[ pluginName ].update) ? FormBar.plugins[ pluginName ].update : FormBar.plugins.solid.update; //default update
@@ -170,14 +173,28 @@ FormBar.prototype._update = function() {
     } else {
     	this._currentPercentage = percentage;
     }
+
+    //Call the callback onChange every update
+    if ( this.onChange && typeof this.onChange == "function"){
+        this.onChange( percentage );
+    }
+
+    //If is 100% call the callback
+    if ( percentage >= 100 && this.onComplete && typeof this.onComplete == "function"){
+        this.onComplete();
+    }
     
     this.updatePlugin( {bar: bar, percentage: percentage} );
 
 
     //Change text color if percentage > 50
     if (this.showText) {
-        var textNode = this.node.querySelector('span.text');
-        textNode.textContent = percentage + "%";
+        var textNode = this.node.querySelector('span.text'),
+            percentageText = (this.textPendingPercentage) ? 100 - percentage : percentage;
+
+        percentageText = " " + percentageText + "% ";
+
+        textNode.textContent = this.beforeText + percentageText + this.afterText;
         if (percentage > 50) {
             if (this._currentTextColor != this.textColors[1]) {
                  textNode.style.color = this.textColors[1];
@@ -189,16 +206,6 @@ FormBar.prototype._update = function() {
                 this._currentTextColor = this.textColors[0];
             }
         }
-    }
-
-    //Call the callback onChange every update
-    if ( this.onChange && typeof this.onChange == "function"){
-        this.onChange( percentage );
-    }
-
-    //If is 100% call the callback
-    if ( percentage >= 100 && this.onComplete && typeof this.onComplete == "function"){
-        this.onComplete();
     }
 }
 
@@ -363,4 +370,3 @@ FormBar.prototype.updatePlugin = FormBar.plugins.solid.update;
 FormBar.prototype.initBehavior = FormBar.util.noop;
 FormBar.prototype.destroyBehavior = FormBar.util.noop;
 FormBar.prototype.getBehaviorPercentage = FormBar.util.noop;		
-

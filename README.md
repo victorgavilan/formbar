@@ -62,7 +62,10 @@ FormBar have many configuration options that makes easier fits it to your web pa
 * **borderColor:** (CSS Color) Border color.
 
 ###Bar text options
-* **showText:** (Boolean value) Show/Hide the percentage number in the bar.
+* **showText:** (Boolean) Show/Hide the percentage number in the bar.
+* **textPendingPercentage:** (Boolean) If true, shows the pending instead the completed percentage.
+* **beforeText:** (String) Text to show before the percentage number.
+* **afterText:** (String) Text to show after the percentage number.
 * **textSize:** (CSS size) Text size. If you pass a number it will represent the size in pixels. 
 * **textTop:** (CSS size) Text top position. If you pass a number it will represent the value in pixels. 
 * **textColors:** (CSS Color) Text color.
