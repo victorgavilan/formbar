@@ -11,5 +11,5 @@ FormBar.plugins.sections = {
         html += "</div>";
         return html;               
     }
-}
+};
 

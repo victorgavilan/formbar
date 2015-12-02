@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <script src="lib/yuitest-min.js"></script>
+    <script src="../dist/formbar-all-min.js"></script>
+  </head>
+  <body>
+    <div id="bar"></div>
+    
+    <script language="javascript">
+      var Y = YUITest,
+          testSuite = new Y.TestSuite("FormBar Core Tests"),
+          formBar = new FormBar({
+            node: '#bar'            
+          }),
+          testCase;
+          
+          formBar.render();
+          
+          testCase = new Y.TestCase({
+            name: 'Prueba de la configuracion por defecto',
+            'getBar debe devolver el nodo de la barra': function(){
+              Y.Assert.areEqual( document.querySelector('.fpbar'), formBar.getBar());
+            },
+            'Se deben aplicar los valores por defecto': function(){
+            	Y.Assert.areEqual( '#44F', formBar.colors[0], 'colors[0] debe ser #44F');
+            	Y.Assert.areEqual( 1, formBar.currentStep, 'currentStep debe ser 1');
+            	Y.Assert.areEqual( 1, formBar.totalSteps, 'totalSteps debe ser 1');
+            	Y.Assert.areEqual( '#bbb', formBar.borderColor, 'borderColor debe ser #bbb');            	
+            	Y.Assert.areEqual( false, formBar.showBorder, 'showBorder debe ser false');
+							Y.Assert.areEqual( false, formBar.showText, 'showText debe ser false');
+            	Y.Assert.areEqual( false, formBar.textPendingPercentage, 'textPendingPercentage debe ser false');
+            	Y.Assert.areEqual( '', formBar.beforeText, 'beforeText debe ser una cadena vacia');
+            	Y.Assert.areEqual( '', formBar.afterText, 'afterText debe ser una cadena vacia');            	
+            	Y.Assert.areEqual( 'black', formBar.textColors[0], 'textColors[0] debe ser black');
+            	Y.Assert.areEqual( 'white', formBar.textColors[1], 'textColors[1] debe ser white');
+            	Y.Assert.areEqual( '1em', formBar.textSize, 'textSize debe ser 1em');
+            	Y.Assert.areEqual( '5px', formBar.textTop, 'textTop debe ser 5px');
+            	Y.Assert.areEqual( '4px', formBar.barHeight, 'barHeight debe ser 4px');
+            	Y.Assert.isTrue( formBar.node.style.background.indexOf('transparent') !== -1, 'background debe ser transparent'); 
+            },
+            'Prueba del comportamiento por defecto progressbar': function(){
+              formBar.setValue(60);
+            	Y.Assert.areEqual( '60', formBar.getPercentage() );
+            }
+          });
+      
+          testSuite.add( testCase );
+      
+      Y.TestRunner.add( testSuite);
+      
+      Y.TestRunner.subscribe( Y.TestRunner.COMPLETE_EVENT, function(){
+		    var resultados = Y.TestRunner.getResults( Y.TestFormat.TAP );
+		    console.log( resultados );
+		  });
+		  
+      Y.TestRunner.run();
+      
+      
+    </script>
+  </body>
+</html>

@@ -4,7 +4,8 @@
   "description": "Simple form progress bar with multiple effects.",
   "main": "formbar.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grover tests/*.html",
+    "jshint": "jshint src/*.js src/**/*.js"
   },
   "keywords": [
     "form",
@@ -19,6 +20,9 @@
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-copy": "^0.8.2",
-    "grunt-contrib-watch": "^0.6.1"
+    "grunt-contrib-watch": "^0.6.1",
+    "yuitest": "^0.7.9",
+    "grunt-grover": "^0.2.5",
+    "grunt-contrib-jshint": "^0.11.3"
   }
 }

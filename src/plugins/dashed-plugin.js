@@ -8,5 +8,5 @@ FormBar.plugins.dashed = {
         bar.style.borderStyle = "dashed";
         bar.style.height = 0;
     }
-}
+};
 

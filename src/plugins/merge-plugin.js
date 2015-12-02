@@ -7,7 +7,7 @@ FormBar.plugins.merge = {
 
         bar.style.background = this.colors[0];
         bar.style.textAlign = "center";
-        bar.style.width = "100%"
+        bar.style.width = "100%";
 
         mask.style.background = this.colors[1];
         mask.style.width = "100%";
@@ -23,5 +23,5 @@ FormBar.plugins.merge = {
 
           mask.style.width = 100 - percentage + "%";
     }
-}
+};
 

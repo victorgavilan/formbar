@@ -7,5 +7,5 @@ FormBar.plugins.gradient = {
 
         bar.style.background = gradient;
     }
-}
+};
 

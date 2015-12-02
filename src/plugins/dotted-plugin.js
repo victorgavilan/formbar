@@ -8,5 +8,5 @@ FormBar.plugins.dotted = {
         bar.style.borderStyle = "dotted";
         bar.style.height = 0;
     }
-}
+};
 

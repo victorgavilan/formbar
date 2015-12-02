@@ -35,6 +35,7 @@
   <pre>
 new FormBar({
     node: '#Bar1',
+    behavior: 'formbar'
 }).render();
   </pre>
   <h3>Same as:</h3>  
@@ -44,7 +45,8 @@ new FormBar({
     node: '#Bar1',
     barHeight: '4px', /* default height */
     colors:["#55F"],  /* default color */
-    plugin: 'solid'   /* default plugin */
+    plugin: 'solid',   /* default plugin */
+    behavior: 'formbar'
 }).render();
 	</pre>
   
@@ -59,7 +61,8 @@ new FormBar({
     showText: true,
     textSize: 15,
     textTop: 5,
-    showBorder: true
+    showBorder: true,
+    behavior: 'formbar'
     
 }).render();
   </pre>
@@ -76,7 +79,8 @@ new FormBar({
     textSize: 30,
     textTop: 10,
     background: '#FEA',
-    showBorder: true
+    showBorder: true,
+    behavior: 'formbar'
     
 }).render();
   </pre>
@@ -86,7 +90,8 @@ new FormBar({
 <script src="formbar-all-min.js"></script>
 <script>
     new FormBar({
-        node: '#Bar1'
+        node: '#Bar1',
+        behavior: 'formbar'
     }).render();
     
     new FormBar({
@@ -97,7 +102,8 @@ new FormBar({
         showText: true,
         textSize: 15,
         textTop: 5,        
-        showBorder: true
+        showBorder: true,
+        behavior: 'formbar'
     }).render();
     
     
@@ -110,7 +116,8 @@ new FormBar({
         textSize: 30,
         textTop: 10,
         background: '#FEA',
-        showBorder: true
+        showBorder: true,
+        behavior: 'formbar'
     }).render();
     
 </script>

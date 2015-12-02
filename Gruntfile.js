@@ -5,16 +5,12 @@ module.exports = function( grunt ){
     	dist: ['dist']
     },
     uglify: {
-      formbar: {
-        src: ['src/formbar.js'],
-        dest: 'dist/formbar-min.js'
-      },
-      formbarPlugins: {
+      MinimizeAll: {
         files: [{
           expand: true,
-          cwd: 'src/plugins/',
-          src: ['*.js'],        
-          dest: 'dist/plugins/',
+          cwd: 'src/',
+          src: ['**/*.js'],        
+          dest: 'dist/',
           ext: '-min.js'
         }]
       }
@@ -33,7 +29,7 @@ module.exports = function( grunt ){
           { src: ['dist/formbar-min.js','dist/plugins/sections-plugin-min.js'], dest: 'dist/formbar-sections-min.js' }
         ]
       },
-      allPlugins: {
+      allInOneFile: {
         files: [{
           src: [
           'dist/formbar-min.js',
@@ -42,7 +38,8 @@ module.exports = function( grunt ){
           'dist/plugins/dotted-plugin-min.js',
           'dist/plugins/gradient-plugin-min.js', 
           'dist/plugins/merge-plugin-min.js',          
-          'dist/plugins/sections-plugin-min.js'
+          'dist/plugins/sections-plugin-min.js',
+          'dist/behaviors/formbar-behavior-min.js'
           ],        
           dest: 'dist/formbar-all-min.js'
         }]
@@ -54,10 +51,19 @@ module.exports = function( grunt ){
       	dest: 'examples/formbar-all-min.js'
       }
   	},
+  	jshint: {
+  		plugins: {
+  			src: ['src/plugins/*.js']
+  		},
+  		behaviors: {
+  			src: ['src/behaviors/*.js']
+  		},
+  		core: 'src/formbar.js'
+  	},
   	watch: {
 			scripts: {
 				files: '**/*.js',
-				tasks: ['default'],
+				tasks: ['test'],
 			}
 		}
   });
@@ -67,6 +73,9 @@ module.exports = function( grunt ){
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy'); 
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
   
-  grunt.registerTask('default', ['uglify', 'concat', 'copy']);
+  grunt.loadTasks('tasks/');
+  
+  grunt.registerTask('default', ['jshint','uglify', 'concat', 'copy']);
 }

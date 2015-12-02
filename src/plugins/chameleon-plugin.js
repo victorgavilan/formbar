@@ -22,6 +22,6 @@ FormBar.plugins.chameleon = {
   	        bar.style.background = this.colors[ indexColor ];
           }
     }
-}
+};
 
 
