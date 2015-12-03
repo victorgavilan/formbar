@@ -54,6 +54,8 @@ function FormBar( cfg ){
     this._barNode = null; //Bar html node reference
     this._currentPercentage = null;
     this._currentTextColor = this.textColors[0];
+    this._currentPlugin = null;
+    this._currentBehavior = null;
     
     //Set the bar plugin
     var plugin = cfg.plugin || 'solid';
@@ -73,8 +75,10 @@ function FormBar( cfg ){
 */
 FormBar.prototype.destroy = function(){
 		this.destroyPlugin();
+		this._currentPlugin = null;
     this.destroyBehavior();
-    this.node.removeChild( this.node.firstChild );
+    this._currentBehavior = null;
+    this.node.removeChild( this.getBar() );    
 };
 
 /**
@@ -112,6 +116,7 @@ FormBar.prototype.getPercentage = function(){
 /**
     Set the plugin to use to draw the bar
     @method setPlugin
+    @throws {Error} Plugin does not exist.
 */
 FormBar.prototype.setPlugin = function (pluginName){
 	
@@ -120,13 +125,15 @@ FormBar.prototype.setPlugin = function (pluginName){
     if ( pluginName in FormBar.plugins ){
         //Destroy phase previous plugin
         this.destroyPlugin(); 
+
         //Load new plugin
+        this._currentPlugin = pluginName;
         this.contentPlugin = (FormBar.plugins[ pluginName ].content) ? FormBar.plugins[ pluginName ].content : null;
         this.initPlugin = (FormBar.plugins[ pluginName ].init) ? FormBar.plugins[ pluginName ].init : FormBar.plugins.solid.init; //default init		
         this.updatePlugin = (FormBar.plugins[ pluginName ].update) ? FormBar.plugins[ pluginName ].update : FormBar.plugins.solid.update; //default update
         this.destroyPlugin = (FormBar.plugins[ pluginName ].destroy) ? FormBar.plugins[ pluginName ].destroy : FormBar.util.noop;
     } else {
-        console.log('There is not any \"'+ pluginName +'\" plugin registered'); 
+        throw new Error('There is not any \"'+ pluginName +'\" plugin registered');
     }
 };
 
@@ -134,17 +141,19 @@ FormBar.prototype.setPlugin = function (pluginName){
 /**
     Set bar behavior
     @method setBehavior
+    @throws {Error} Behavior does not exist.
 */
 FormBar.prototype.setBehavior = function (behaviorName){
 
     behaviorName = behaviorName.toLowerCase();
 
     if ( behaviorName in FormBar.behaviors ){
+         this._currentBehavior = behaviorName;
          this.initBehavior = (FormBar.behaviors[ behaviorName ].init ) ? FormBar.behaviors[ behaviorName ].init : FormBar.util.noop;
          this.destroyBehavior = (FormBar.behaviors[ behaviorName ].destroy) ? FormBar.behaviors[ behaviorName ].destroy : FormBar.util.noop;
-         this.getPercentageBehavior = (FormBar.behaviors[ behaviorName ].percentage) ? FormBar.behaviors[ behaviorName ].percentage : FormBar.util.noop;		
+         this.getPercentageBehavior = (FormBar.behaviors[ behaviorName ].percentage) ? FormBar.behaviors[ behaviorName ].percentage : FormBar.util.noop;
     } else {
-        console.log('There is not any \"'+ behaviorName +'\" behavior registered'); 
+        throw new Error('There is not any \"'+ behaviorName +'\" behavior registered');
     }
 };
 
@@ -229,7 +238,15 @@ FormBar.prototype.render = function() {
     this.node.innerHTML = html;
 
     //Do de initialization
+    if ( this._currentPlugin === null ){ 
+    	this.setPlugin('solid'); //If there is not a plugin set the default
+    }
     this.initPlugin();
+
+		if ( this._currentBehavior === null){ 
+    	this.setBehavior('progressbar'); //If there is not a behavior set the default
+    	this.initBehavior();
+    }
 
     //Update the plugin state
     this._update();

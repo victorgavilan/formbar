@@ -15,7 +15,7 @@
           testCase;
           
           formBar.render();
-          
+                   
           testCase = new Y.TestCase({
             name: 'Prueba de la configuracion por defecto',
             'getBar debe devolver el nodo de la barra': function(){
@@ -31,8 +31,7 @@
             	Y.Assert.areEqual( false, formBar.textPendingPercentage, 'textPendingPercentage debe ser false');
             	Y.Assert.areEqual( '', formBar.beforeText, 'beforeText debe ser una cadena vacia');
             	Y.Assert.areEqual( '', formBar.afterText, 'afterText debe ser una cadena vacia');            	
-            	Y.Assert.areEqual( 'black', formBar.textColors[0], 'textColors[0] debe ser black');
-            	Y.Assert.areEqual( 'white', formBar.textColors[1], 'textColors[1] debe ser white');
+            	Y.ArrayAssert.containsItems( ['black', 'white'], formBar.textColors, 'textColors debe ser [black, white]');
             	Y.Assert.areEqual( '1em', formBar.textSize, 'textSize debe ser 1em');
             	Y.Assert.areEqual( '5px', formBar.textTop, 'textTop debe ser 5px');
             	Y.Assert.areEqual( '4px', formBar.barHeight, 'barHeight debe ser 4px');
@@ -40,12 +39,53 @@
             },
             'Prueba del comportamiento por defecto progressbar': function(){
               formBar.setValue(60);
-            	Y.Assert.areEqual( '60', formBar.getPercentage() );
+            	Y.Assert.areEqual( 60, formBar.getPercentage() );
             }
-          });
-      
+          });      
           testSuite.add( testCase );
-      
+          
+          testCase = new Y.TestCase({
+            name: 'Prueba de los métodos setPlugin y setBehavior',
+            _should: {
+            	error: {
+            		'setPlugin debe emitir un error si el plugin no existe': true,
+            		'setBehavior debe emitir un error si el behavior no existe': true
+            	}
+            },
+            'setPlugin debe emitir un error si el plugin no existe': function(){
+              formBar.setPlugin('pluginInexistente');
+            },
+            'setBehavior debe emitir un error si el behavior no existe': function(){
+              formBar.setBehavior('behaviorInexistente');
+            }          
+          });      
+		      testSuite.add( testCase );
+		      
+		      
+		      testCase = new Y.TestCase({
+            name: 'Prueba de los metodos render y destroy',
+            'destroy debe eliminar la barra en el navegador': function(){
+              Y.Assert.isNotNull( formBar.node.querySelector('.fpbar'), 'No hay ninguna barra para eliminar por el nodo destroy' );
+
+              formBar.destroy();
+              this.wait( function(){
+                 Y.Assert.isNull( formBar.node.querySelector('.fpbar'), 'El método destroy no ha eliminado el nodo de la barra' );
+              }, 1000 );
+            },
+            'render debe mostrar la barra en el navegador': function(){
+              Y.Assert.isNull( formBar.node.querySelector('.fpbar') );
+
+							formBar.render();
+              formBar.setValue(60);
+
+              this.wait( function(){
+                 Y.Assert.isNotNull( formBar.node.querySelector('.fpbar') );
+              }, 1000 );
+            }          
+          });      
+		      testSuite.add( testCase );
+		      
+		      
       Y.TestRunner.add( testSuite);
       
       Y.TestRunner.subscribe( Y.TestRunner.COMPLETE_EVENT, function(){
