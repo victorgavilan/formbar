@@ -39,7 +39,8 @@ module.exports = function( grunt ){
           'dist/plugins/gradient-plugin-min.js', 
           'dist/plugins/merge-plugin-min.js',          
           'dist/plugins/sections-plugin-min.js',
-          'dist/behaviors/formbar-behavior-min.js'
+          'dist/behaviors/formbar-behavior-min.js',
+          'dist/behaviors/timer-behavior-min.js'          
           ],        
           dest: 'dist/formbar-all-min.js'
         }]

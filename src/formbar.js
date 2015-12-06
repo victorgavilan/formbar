@@ -17,9 +17,6 @@ function FormBar( cfg ){
     this.onComplete = cfg.onComplete;
     this.onChange = cfg.onChange;
 
-    //Form Html node containing the form we want observe
-    this.formNode = document.querySelector( cfg.formNode ) || document.body;
-
     //Color array share by all plugins
     this.colors = cfg.colors || ['#44F'];
 
@@ -54,18 +51,15 @@ function FormBar( cfg ){
     this._barNode = null; //Bar html node reference
     this._currentPercentage = null;
     this._currentTextColor = this.textColors[0];
-    this._currentPlugin = null;
-    this._currentBehavior = null;
     
-    //Set the bar plugin
-    var plugin = cfg.plugin || 'solid';
-    this.setPlugin( plugin );
-
     //Set the behavior and init it
     var behavior = cfg.behavior || 'progressbar';
     this.setBehavior( behavior);
-    this.initBehavior();
-  
+    this.initBehavior( cfg );
+
+    //Set the bar plugin
+    var plugin = cfg.plugin || 'solid';
+    this.setPlugin( plugin );
 }
 
 
@@ -75,9 +69,7 @@ function FormBar( cfg ){
 */
 FormBar.prototype.destroy = function(){
 		this.destroyPlugin();
-		this._currentPlugin = null;
     this.destroyBehavior();
-    this._currentBehavior = null;
     this.node.removeChild( this.getBar() );    
 };
 
@@ -127,9 +119,9 @@ FormBar.prototype.setPlugin = function (pluginName){
         this.destroyPlugin(); 
 
         //Load new plugin
-        this._currentPlugin = pluginName;
         this.contentPlugin = (FormBar.plugins[ pluginName ].content) ? FormBar.plugins[ pluginName ].content : null;
-        this.initPlugin = (FormBar.plugins[ pluginName ].init) ? FormBar.plugins[ pluginName ].init : FormBar.plugins.solid.init; //default init		
+        this.initPlugin = (FormBar.plugins[ pluginName ].init) ? FormBar.plugins[ pluginName ].init : FormBar.plugins.solid.init; //default init
+
         this.updatePlugin = (FormBar.plugins[ pluginName ].update) ? FormBar.plugins[ pluginName ].update : FormBar.plugins.solid.update; //default update
         this.destroyPlugin = (FormBar.plugins[ pluginName ].destroy) ? FormBar.plugins[ pluginName ].destroy : FormBar.util.noop;
     } else {
@@ -148,7 +140,6 @@ FormBar.prototype.setBehavior = function (behaviorName){
     behaviorName = behaviorName.toLowerCase();
 
     if ( behaviorName in FormBar.behaviors ){
-         this._currentBehavior = behaviorName;
          this.initBehavior = (FormBar.behaviors[ behaviorName ].init ) ? FormBar.behaviors[ behaviorName ].init : FormBar.util.noop;
          this.destroyBehavior = (FormBar.behaviors[ behaviorName ].destroy) ? FormBar.behaviors[ behaviorName ].destroy : FormBar.util.noop;
          this.getPercentageBehavior = (FormBar.behaviors[ behaviorName ].percentage) ? FormBar.behaviors[ behaviorName ].percentage : FormBar.util.noop;
@@ -238,18 +229,16 @@ FormBar.prototype.render = function() {
     this.node.innerHTML = html;
 
     //Do de initialization
-    if ( this._currentPlugin === null ){ 
-    	this.setPlugin('solid'); //If there is not a plugin set the default
-    }
     this.initPlugin();
-
-		if ( this._currentBehavior === null){ 
-    	this.setBehavior('progressbar'); //If there is not a behavior set the default
-    	this.initBehavior();
-    }
 
     //Update the plugin state
     this._update();
+    
+    //Replace render behavior
+    //Render will be call only once
+    this.render = function(){
+    	console.log('Render can only be called once');
+    };
 };
 
 

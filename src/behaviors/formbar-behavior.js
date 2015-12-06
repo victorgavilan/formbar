@@ -1,9 +1,12 @@
 /** FORM BAR BEHAVIOR **/
 FormBar.behaviors.formbar = {
-    init: function(){
+    init: function( cfg ){
+
+       //Form Html node containing the form we want observe
+       this.formNode = document.querySelector( cfg.formNode ) || document.body;
 
        this._formElements = [];
-       
+
        //Event handler
        this.handleEvent = function(ev){
 					if ( FormBar.util.allowedField( ev.target ) ) {

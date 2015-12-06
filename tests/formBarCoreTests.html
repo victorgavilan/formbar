@@ -9,15 +9,22 @@
     <script language="javascript">
       var Y = YUITest,
           testSuite = new Y.TestSuite("FormBar Core Tests"),
-          formBar = new FormBar({
-            node: '#bar'            
-          }),
+          formBar,
           testCase;
-          
-          formBar.render();
-                   
+     
+     
+     
           testCase = new Y.TestCase({
             name: 'Prueba de la configuracion por defecto',
+            init: function(){
+				      formBar = new FormBar({
+				        node: '#bar'            
+				      });
+				      formBar.render();
+            },
+            destroy: function(){
+	            formBar.destroy();
+            },
             'getBar debe devolver el nodo de la barra': function(){
               Y.Assert.areEqual( document.querySelector('.fpbar'), formBar.getBar());
             },
@@ -44,6 +51,8 @@
           });      
           testSuite.add( testCase );
           
+          
+          
           testCase = new Y.TestCase({
             name: 'Prueba de los métodos setPlugin y setBehavior',
             _should: {
@@ -52,25 +61,63 @@
             		'setBehavior debe emitir un error si el behavior no existe': true
             	}
             },
+            init: function(){
+            	formBar = new FormBar({
+				        node: '#bar'            
+				      });
+				      
+				      FormBar.plugins.testplugin = {
+				      	init: function(){
+				      	  console.log('INIT TESTPLUGIN');
+				      	  console.log(this);
+				      		this.testPluginLoaded = true;				      	
+				      	},
+				      	destroy: function(){
+				      	  delete this.testPluginLoaded;
+				      	}
+				      };
+				      
+				      FormBar.behaviors.testbehavior = {
+				      	init: function(){
+				      		console.log('INIT BEHAVIOR');
+				      		this.testBehaviorLoaded = true;				      	
+				      	},
+				      	destroy: function(){
+				      	  delete this.testBehaviorLoaded;
+				      	}
+				      };
+				      
+            },
+            destroy: function(){
+              formBar.destroy();
+            },
             'setPlugin debe emitir un error si el plugin no existe': function(){
               formBar.setPlugin('pluginInexistente');
             },
             'setBehavior debe emitir un error si el behavior no existe': function(){
               formBar.setBehavior('behaviorInexistente');
+              Y.Assert.isTrue( formBar.testBehaviorLoaded, 'Error al cargar el behavior' );
+              
+            },'setPlugin y setBehavior debe cargar el plugin y behavior indicado': function(){
+              formBar.setPlugin('testplugin');
+              formBar.setBehavior('testbehavior');              
+              formBar.initPlugin();
+              formBar.initBehavior();  
+              Y.Assert.isTrue( formBar.testPluginLoaded, 'Error al cargar el plugin' );
+              Y.Assert.isTrue( formBar.testBehaviorLoaded, 'Error al cargar el behavior' );              
             }          
           });      
 		      testSuite.add( testCase );
 		      
 		      
+		      
+		      
 		      testCase = new Y.TestCase({
             name: 'Prueba de los metodos render y destroy',
-            'destroy debe eliminar la barra en el navegador': function(){
-              Y.Assert.isNotNull( formBar.node.querySelector('.fpbar'), 'No hay ninguna barra para eliminar por el nodo destroy' );
-
-              formBar.destroy();
-              this.wait( function(){
-                 Y.Assert.isNull( formBar.node.querySelector('.fpbar'), 'El método destroy no ha eliminado el nodo de la barra' );
-              }, 1000 );
+            init: function(){
+            	formBar = new FormBar({
+				        node: '#bar'            
+				      });
             },
             'render debe mostrar la barra en el navegador': function(){
               Y.Assert.isNull( formBar.node.querySelector('.fpbar') );
@@ -81,7 +128,18 @@
               this.wait( function(){
                  Y.Assert.isNotNull( formBar.node.querySelector('.fpbar') );
               }, 1000 );
-            }          
+            },
+            destroy: function(){
+              formBar.destroy();
+            },
+            'destroy debe eliminar la barra en el navegador': function(){
+              Y.Assert.isNotNull( formBar.node.querySelector('.fpbar'), 'No hay ninguna barra para eliminar por el nodo destroy' );
+              formBar.destroy();
+              this.wait( function(){
+                 Y.Assert.isNull( formBar.node.querySelector('.fpbar'), 'El método destroy no ha eliminado el nodo de la barra' );
+              }, 1000 );
+            }
+                      
           });      
 		      testSuite.add( testCase );
 		      

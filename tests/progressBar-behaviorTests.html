@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <script src="lib/yuitest-min.js"></script>
+    <script src="../dist/formbar-all-min.js"></script>
+  </head>
+  <body>
+    <div id="bar"></div>
+    
+    <script language="javascript">
+      var Y = YUITest,
+          testSuite = new Y.TestSuite("Progress Bar Behavior Tests"),
+          formBar,
+          testCase;
+     
+     
+     
+          testCase = new Y.TestCase({
+            name: 'Prueba del metodo setValue y los eventos onChange y onComplete.',
+            init: function(){
+				      formBar = new FormBar({
+				        node: '#bar'            
+				      });
+				      formBar.render();
+            },
+            destroy: function(){
+	            formBar.destroy();
+            },
+            'SetValue debe establecer el valor en 60': function(){
+              formBar.setValue(60);
+              Y.Assert.areEqual( 60, formBar._currentPercentage );
+            },
+            'onChange debe reaccionar en cada cambio': function(){
+              var cambios = 0;
+              
+              formBar.onChange = function(){
+              	++cambios;
+              };
+              
+              formBar.setValue(30);
+              formBar.setValue(60);
+              formBar.setValue(10);
+              Y.Assert.areEqual( 3, cambios );
+            },
+            'onComplete debe llamarse al completar la barra': function(){
+              var cambios = 0,
+                  completed = true;
+              
+              formBar.onChange = function(){
+              	++cambios;
+              };
+              
+              formBar.onComplete = function(){
+              	completed = true;
+              };
+              
+              formBar.setValue(30);
+              formBar.setValue(60);
+              formBar.setValue(10);
+              formBar.setValue(100);
+              Y.Assert.areEqual( 4, cambios, 'onComplete debe haberse llamado cuatro veces' );
+              Y.Assert.isTrue( completed, 'onComplete debe haberse llamado al final de la barra' );
+            },
+            'Destroy debe eliminar el método setValue añadido por el behavior': function(){
+              formBar.destroy();
+              Y.Assert.isUndefined( formBar.setValue );
+            }
+          });      
+          testSuite.add( testCase );
+          
+          
+          
+             
+		      
+      Y.TestRunner.add( testSuite);
+      
+      Y.TestRunner.subscribe( Y.TestRunner.COMPLETE_EVENT, function(){
+		    var resultados = Y.TestRunner.getResults( Y.TestFormat.TAP );
+		    console.log( resultados );
+		  });
+		  
+      Y.TestRunner.run();
+      
+      
+    </script>
+  </body>
+</html>

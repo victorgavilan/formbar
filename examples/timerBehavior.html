@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Demo for FormBar.js">
+<meta name="viewport" content="width=device-width">
+<title>TimerBehavior Demo</title>
+<style>
+  pre {
+    background: #EEE;
+    padding: 20px;
+    border: 1px solid #999;
+    display: inline-block;
+  }
+  .bar{
+    margin-top: 50px;
+  }
+</style>
+</head>
+<body>
+<h1>Timer Behavior DEMO</h1>
+
+  <div id="Bar1" class="bar"></div>
+
+<script src="formbar-all-min.js"></script>
+<script>
+    
+    var myBar = new FormBar({
+        node: '#Bar1',
+        barHeight: '25px',
+        colors:["#00F"], 
+        plugin: 'solid',
+        showText: true,
+        textSize: 15,
+        textTop: 5,        
+        showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 1000,
+ 				maxTime: 5
+    });
+    
+    myBar.render();
+    myBar.start();
+    
+    
+    
+    
+</script>
+</body>
+</html>
