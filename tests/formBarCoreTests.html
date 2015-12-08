@@ -25,8 +25,8 @@
             destroy: function(){
 	            formBar.destroy();
             },
-            'getBar debe devolver el nodo de la barra': function(){
-              Y.Assert.areEqual( document.querySelector('.fpbar'), formBar.getBar());
+            'getBar debe devolver el nodo del contenido de la barra': function(){
+              Y.Assert.areEqual( document.querySelector('.fpbar-content'), formBar.getBar());
             },
             'Se deben aplicar los valores por defecto': function(){
             	Y.Assert.areEqual( '#44F', formBar.colors[0], 'colors[0] debe ser #44F');

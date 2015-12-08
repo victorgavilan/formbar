@@ -27,9 +27,11 @@ function FormBar( cfg ){
     //Bar border configuration
     this.borderColor = cfg.borderColor || '#bbb'; 
     this.showBorder = cfg.showBorder || false;
+    this.borderRadius = cfg.borderRadius || 5;
 
     //Bar text configuration
     this.showText = cfg.showText || false;
+    this.textAlign = cfg.textAlign || 'center';
     this.textPendingPercentage = cfg.textPendingPercentage || false;
     this.beforeText = cfg.beforeText || '';
     this.afterText = cfg.afterText ||'';
@@ -70,7 +72,7 @@ function FormBar( cfg ){
 FormBar.prototype.destroy = function(){
 		this.destroyPlugin();
     this.destroyBehavior();
-    this.node.removeChild( this.getBar() );    
+    this.node.removeChild( this.node.querySelector('.fpbar-wrapper') );    
 };
 
 /**
@@ -80,7 +82,7 @@ FormBar.prototype.destroy = function(){
 */
 
 FormBar.prototype.getBar = function(){
-  if ( !this._barNode ) this._barNode = this.node.querySelector(".fpbar");
+  if ( !this._barNode ) this._barNode = this.node.querySelector(".fpbar-content");
 	return this._barNode;  
 };
 
@@ -210,9 +212,23 @@ FormBar.prototype.render = function() {
     //Create the dom structure
     //Allow to pass a function or a string to generate the html content. 
     //The function must return an html string.
-    var content = '',
-        text = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; top:'+ this.textTop +'; font-weight: bold; display:block; left: 0px; text-align: center; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '',
-        html;
+    var fpbar,
+        fpwrapper,
+        fpborder,
+        fpcontent,
+        fptext,
+        content = '',
+        html,
+        htmlborder = (this.showBorder) ? 'border: 1px solid ' + this.borderColor +'; border-radius:'+ this.borderRadius + 'px;': '';
+        
+        
+        //html bar DOM structure
+        fpwrapper = '<div class="fpbar-wrapper" style="position: relative; height: '+ this.barHeight + ';">';       
+        fpborder = '<div class="fpbar-border" style="height: 100%; width:100%; overflow: hidden; '+ htmlborder + '">';
+        fpbar = '<div class="fpbar" style="position: relative; height: 100%; ">';
+        fpcontent = '<div class="fpbar-content" style="height: 100%; transition: all 0.5s;">';     
+        fptext = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; top:'+ this.textTop +'; font-weight: bold; display:block; left: 0px; text-align: '+ this.textAlign +'; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '';
+        
  
     if (this.contentPlugin) {
         if (typeof this.content === "function") {
@@ -221,11 +237,13 @@ FormBar.prototype.render = function() {
             content = this.contentPlugin;       
         }
     }
-
-    html = '<div class="fpbar" style="position: relative; height:'+ this.barHeight +'; transition: all 1s; width: 0px; overflow: hidden">'+ content +'</div>' + text;
+    html = fpwrapper + fpborder + fpbar + fpcontent + content + '</div></div></div>' + fptext + '</div>';
     
-    this.node.style.position = 'relative';
-    if (this.showBorder) this.node.style.border = '1px solid ' + this.borderColor;
+    
+    /*'<div class="fpbar" style="position: relative; height:'+ this.barHeight +'; overflow: hidden;'+ border +'"><div class="fpbar-content" style="position: relative; height:'+ this.barHeight +'; transition: all 1s;width:0px;">'+ content +'</div>' + text + '</div>';
+*/
+    
+    
     this.node.innerHTML = html;
 
     //Do de initialization

@@ -5,6 +5,7 @@
 <meta name="description" content="Demo for FormBar.js">
 <meta name="viewport" content="width=device-width">
 <title>TimerBehavior Demo</title>
+<link href="http://yui.yahooapis.com/pure/0.6.0/buttons-min.css" rel="stylesheet"/>
 <style>
   pre {
     background: #EEE;
@@ -13,15 +14,21 @@
     display: inline-block;
   }
   .bar{
-    margin-top: 50px;
+    margin: 10px 0px;
+    width: 50%;
   }
+  
+  
 </style>
 </head>
 <body>
 <h1>Timer Behavior DEMO</h1>
 
   <div id="Bar1" class="bar"></div>
-
+  <div id="Bar2" class="bar"></div>
+  <button id="start" class="pure-button pure-button-primary">Start</button>
+  <button id="stop" class="pure-button pure-button-primary">Stop</button>
+  <button id="reset" class="pure-button pure-button-primary">Reset</button>
 <script src="formbar-all-min.js"></script>
 <script>
     
@@ -35,13 +42,47 @@
         textTop: 5,        
         showBorder: true,
  				behavior: 'timerbar',
- 				timerInterval: 1000,
+ 				timerInterval: 250,
  				maxTime: 5
     });
     
     myBar.render();
-    myBar.start();
+
+    var myBar2 = new FormBar({
+        node: '#Bar2',
+        barHeight: '10px',
+        borderRadius: 50,
+        colors:['#4CAE19', '#FFF'], 
+        plugin: 'merge',
+        showBorder: true,
+        showText: true,
+        textAlign: 'right',
+        textTop: 12,
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
     
+    myBar2.render();
+    
+    var start = document.getElementById('start'),
+        stop = document.getElementById('stop'),
+        reset = document.getElementById('reset');
+
+    start.addEventListener('click', function(){
+    	myBar.start();
+    	myBar2.start();
+    });
+
+    stop.addEventListener('click', function(){
+    	myBar.stop();
+    	myBar2.stop();
+    });
+    
+    reset.addEventListener('click', function(){
+    	myBar.reset();
+    	myBar2.reset();
+    });
     
     
     

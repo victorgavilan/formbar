@@ -10,6 +10,7 @@ FormBar.behaviors.timerbar = {
       //Reset the timer
       this.reset = function( initValue ){
       	this._timerBehaviorTimerCurrent = (initValue || 0) * 1000;
+      	this._update();
       };
       
       //Starts the timer

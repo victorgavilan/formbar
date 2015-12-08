@@ -60,6 +60,7 @@ FormBar have many configuration options that makes easier fits it to your web pa
  
 * **showBorder:** (Boolean value) Show/Hide a border around the bar.
 * **borderColor:** (CSS Color) Border color.
+* **borderRadius:** (Number) Border radius in pixels (default: 5). Use 50 to create rounded bars.
 
 ###Bar text options
 * **showText:** (Boolean) Show/Hide the percentage number in the bar.
