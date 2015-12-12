@@ -3,7 +3,7 @@ module.exports = function( grunt ){
   var plugins = ['chameleon', 'dashed', 'dotted', 'gradient', 'merge', 'sections'],
       behaviors = ['progressbar', 'formbar', 'timerbar'],
       outDir = 'dist',
-			core = outDir + '/vbar-core-min.js',            
+			core = outDir + '/custom/vbar-core-min.js',            
       createGroups = function( ){
       	var files = [],
             obj;
