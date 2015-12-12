@@ -1,0 +1,1 @@
+vBar.plugins.dotted={init:function(){var a=this.getBar();a.style.borderColor=this.colors[0]+" transparent transparent transparent",a.style.borderWidth=this.barHeight+" 0px 0px 0px",a.style.borderStyle="dotted",a.style.height=0}};

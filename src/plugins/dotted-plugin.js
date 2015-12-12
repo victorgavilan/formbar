@@ -1,4 +1,4 @@
-FormBar.plugins.dotted = {
+vBar.plugins.dotted = {
     init: function(){
         
         var bar = this.getBar();

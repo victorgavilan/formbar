@@ -1,8 +1,53 @@
 module.exports = function( grunt ){
 
+  var plugins = ['chameleon', 'dashed', 'dotted', 'gradient', 'merge', 'sections'],
+      behaviors = ['progressbar', 'formbar', 'timerbar'],
+      outDir = 'dist',
+			core = outDir + '/vbar-core-min.js',            
+      createGroups = function( ){
+      	var files = [],
+            obj;
+      	behaviors.forEach( function( behavior ){
+      		plugins.forEach( function( plugin ){
+      			obj = {};
+      			obj.src = [ 
+      				core, 
+      				outDir + '/custom/plugins/' + plugin + '-plugin-min.js',
+      				outDir + '/custom/behaviors/' + behavior + 'behavior-min.js'	
+      			];
+      			
+      			obj.dest = outDir + '/packages/' + behavior + '/vbar-'+ behavior + '-' + plugin + '-min.js';
+      			
+      			files.push( obj );
+      		});      	
+      	});
+      	
+      	return files;
+      },
+      mixAll = function(){
+      	var files = [],
+      	   	obj = {
+      	   		src: [],
+      	   		dest: outDir + '/vbar-all-min.js'
+      	   	};
+      	   	
+      	plugins.forEach( function( plugin ){
+      		obj.src.push( outDir + '/custom/plugins/' + plugin + '-plugin-min.js');
+      	});
+      	
+      	behaviors.forEach( function( behavior ){
+      		obj.src.push( outDir + '/custom/behaviors/' + behavior + '-behavior-min.js');
+      	});
+      	
+      	return obj;      	
+      };
+
   grunt.initConfig({
+    
     clean: {
-    	dist: ['dist']
+    	dist: ['dist'],
+    	tempDir: ['dist/plugins', 'dist/behaviors']
+    	
     },
     uglify: {
       MinimizeAll: {
@@ -15,41 +60,40 @@ module.exports = function( grunt ){
         }]
       }
     },
+    mkdir:{
+		  all: {
+		    options: {
+		      create: ['dist/custom', 'dist/custom/plugins', 'dist/custom/behaviors']
+		    }
+		  }
+    },
+    //Move files before concat
+    rename: {
+    	moveFiles: {
+		  	files: [{
+		        expand: true,
+		        cwd: 'dist/',
+		        src: ['plugins/*.js', 'behaviors/*.js', 'vbar-core-min.js'],        
+		        dest: 'dist/custom/'
+		      }]
+			}
+			
+    },
     concat: {
        options: {
        	separator: ';'
        },
        mixedPlugins: {
-        files: [
-          { src: ['dist/formbar-min.js','dist/plugins/chameleon-plugin-min.js'], dest: 'dist/formbar-chameleon-min.js'},
-          { src: ['dist/formbar-min.js','dist/plugins/dashed-plugin-min.js'], dest: 'dist/formbar-dashed-min.js' },
-          { src: ['dist/formbar-min.js','dist/plugins/dotted-plugin-min.js'], dest: 'dist/formbar-dotted-min.js' },
-          { src: ['dist/formbar-min.js','dist/plugins/gradient-plugin-min.js'], dest: 'dist/formbar-gradient-min.js' },
-          { src: ['dist/formbar-min.js','dist/plugins/merge-plugin-min.js'], dest: 'dist/formbar-merge-min.js' },
-          { src: ['dist/formbar-min.js','dist/plugins/sections-plugin-min.js'], dest: 'dist/formbar-sections-min.js' }
-        ]
+        files: createGroups()
       },
       allInOneFile: {
-        files: [{
-          src: [
-          'dist/formbar-min.js',
-          'dist/plugins/chameleon-plugin-min.js',
-          'dist/plugins/dashed-plugin-min.js',
-          'dist/plugins/dotted-plugin-min.js',
-          'dist/plugins/gradient-plugin-min.js', 
-          'dist/plugins/merge-plugin-min.js',          
-          'dist/plugins/sections-plugin-min.js',
-          'dist/behaviors/formbar-behavior-min.js',
-          'dist/behaviors/timer-behavior-min.js'          
-          ],        
-          dest: 'dist/formbar-all-min.js'
-        }]
+        files: [ mixAll() ]
       }      
     },
     copy: {
       example: {
-      	src: 'dist/formbar-all-min.js',
-      	dest: 'examples/formbar-all-min.js'
+      	src: 'dist/vbar-all-min.js',
+      	dest: 'examples/vbar-all-min.js'
       }
   	},
   	jshint: {
@@ -59,7 +103,7 @@ module.exports = function( grunt ){
   		behaviors: {
   			src: ['src/behaviors/*.js']
   		},
-  		core: 'src/formbar.js'
+  		core: 'src/vbar-core.js'
   	},
   	watch: {
 			scripts: {
@@ -75,8 +119,10 @@ module.exports = function( grunt ){
   grunt.loadNpmTasks('grunt-contrib-copy'); 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-rename');
+  grunt.loadNpmTasks('grunt-mkdir');
   
   grunt.loadTasks('tasks/');
   
-  grunt.registerTask('default', ['jshint','uglify', 'concat', 'copy']);
+  grunt.registerTask('default', ['clean:dist', 'jshint','uglify', 'mkdir', 'rename', 'concat', 'copy', 'clean:tempDir']);
 }

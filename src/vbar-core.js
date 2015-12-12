@@ -1,4 +1,4 @@
-function FormBar( cfg ){
+function vBar( cfg ){
 
     //container node
     this.node = document.querySelector(cfg.node);
@@ -69,7 +69,7 @@ function FormBar( cfg ){
     Destroy the bar from the DOM and call behaviorDestroy method
     @method destroy
 */
-FormBar.prototype.destroy = function(){
+vBar.prototype.destroy = function(){
 		this.destroyPlugin();
     this.destroyBehavior();
     this.node.removeChild( this.node.querySelector('.fpbar-wrapper') );    
@@ -81,7 +81,7 @@ FormBar.prototype.destroy = function(){
     @return bar's DOM node
 */
 
-FormBar.prototype.getBar = function(){
+vBar.prototype.getBar = function(){
   if ( !this._barNode ) this._barNode = this.node.querySelector(".fpbar-content");
 	return this._barNode;  
 };
@@ -93,7 +93,7 @@ FormBar.prototype.getBar = function(){
     @return percentage adapted to multisteps forms.
 */
 
-FormBar.prototype.getPercentage = function(){
+vBar.prototype.getPercentage = function(){
 
     var percentFilled = this.getPercentageBehavior();
 
@@ -112,20 +112,20 @@ FormBar.prototype.getPercentage = function(){
     @method setPlugin
     @throws {Error} Plugin does not exist.
 */
-FormBar.prototype.setPlugin = function (pluginName){
+vBar.prototype.setPlugin = function (pluginName){
 	
     pluginName = pluginName.toLowerCase();
 
-    if ( pluginName in FormBar.plugins ){
+    if ( pluginName in vBar.plugins ){
         //Destroy phase previous plugin
         this.destroyPlugin(); 
 
         //Load new plugin
-        this.contentPlugin = (FormBar.plugins[ pluginName ].content) ? FormBar.plugins[ pluginName ].content : null;
-        this.initPlugin = (FormBar.plugins[ pluginName ].init) ? FormBar.plugins[ pluginName ].init : FormBar.plugins.solid.init; //default init
+        this.contentPlugin = (vBar.plugins[ pluginName ].content) ? vBar.plugins[ pluginName ].content : null;
+        this.initPlugin = (vBar.plugins[ pluginName ].init) ? vBar.plugins[ pluginName ].init : vBar.plugins.solid.init; //default init
 
-        this.updatePlugin = (FormBar.plugins[ pluginName ].update) ? FormBar.plugins[ pluginName ].update : FormBar.plugins.solid.update; //default update
-        this.destroyPlugin = (FormBar.plugins[ pluginName ].destroy) ? FormBar.plugins[ pluginName ].destroy : FormBar.util.noop;
+        this.updatePlugin = (vBar.plugins[ pluginName ].update) ? vBar.plugins[ pluginName ].update : vBar.plugins.solid.update; //default update
+        this.destroyPlugin = (vBar.plugins[ pluginName ].destroy) ? vBar.plugins[ pluginName ].destroy : vBar.util.noop;
     } else {
         throw new Error('There is not any \"'+ pluginName +'\" plugin registered');
     }
@@ -137,14 +137,14 @@ FormBar.prototype.setPlugin = function (pluginName){
     @method setBehavior
     @throws {Error} Behavior does not exist.
 */
-FormBar.prototype.setBehavior = function (behaviorName){
+vBar.prototype.setBehavior = function (behaviorName){
 
     behaviorName = behaviorName.toLowerCase();
 
-    if ( behaviorName in FormBar.behaviors ){
-         this.initBehavior = (FormBar.behaviors[ behaviorName ].init ) ? FormBar.behaviors[ behaviorName ].init : FormBar.util.noop;
-         this.destroyBehavior = (FormBar.behaviors[ behaviorName ].destroy) ? FormBar.behaviors[ behaviorName ].destroy : FormBar.util.noop;
-         this.getPercentageBehavior = (FormBar.behaviors[ behaviorName ].percentage) ? FormBar.behaviors[ behaviorName ].percentage : FormBar.util.noop;
+    if ( behaviorName in vBar.behaviors ){
+         this.initBehavior = (vBar.behaviors[ behaviorName ].init ) ? vBar.behaviors[ behaviorName ].init : vBar.util.noop;
+         this.destroyBehavior = (vBar.behaviors[ behaviorName ].destroy) ? vBar.behaviors[ behaviorName ].destroy : vBar.util.noop;
+         this.getPercentageBehavior = (vBar.behaviors[ behaviorName ].percentage) ? vBar.behaviors[ behaviorName ].percentage : vBar.util.noop;
     } else {
         throw new Error('There is not any \"'+ behaviorName +'\" behavior registered');
     }
@@ -156,7 +156,7 @@ FormBar.prototype.setBehavior = function (behaviorName){
     Update the bar state. 
     @method update
 */
-FormBar.prototype._update = function( ) {
+vBar.prototype._update = function( ) {
         
     var bar = this.getBar(),
         percentage = this.getPercentage();
@@ -207,7 +207,7 @@ FormBar.prototype._update = function( ) {
     Render the bar's initial state
     @method render
 */ 
-FormBar.prototype.render = function() {
+vBar.prototype.render = function() {
 
     //Create the dom structure
     //Allow to pass a function or a string to generate the html content. 
@@ -264,7 +264,7 @@ FormBar.prototype.render = function() {
 /***************
  ** UTILITIES **
  ***************/
-FormBar.util = {};
+vBar.util = {};
 
 /**
     Check if the element has the CSS class
@@ -272,7 +272,7 @@ FormBar.util = {};
     @param element An HTML element.
     @param className CSS class to check if it's in the element.
 */
-FormBar.util.hasClass = function( element, className ){
+vBar.util.hasClass = function( element, className ){
     var classes = element.className.replace(/\s+/g, ' ').split(' ');
    
     for (var i = 0; i < classes.length; i++) {
@@ -287,60 +287,25 @@ FormBar.util.hasClass = function( element, className ){
 /**
     Indicates if a field must be observed by the formBar
 */
-FormBar.util.allowedField = function( field ){
+vBar.util.allowedField = function( field ){
     var type = field.type;
-    return ( type != "button" && type != "submit" && type != "checkbox" && type != "hidden" && (!FormBar.util.hasClass(field, 'ignore')) );
+    return ( type != "button" && type != "submit" && type != "checkbox" && type != "hidden" && (!vBar.util.hasClass(field, 'ignore')) );
 };
 
 // No operation
-FormBar.util.noop = function(){};
+vBar.util.noop = function(){};
 
 
 /*************
  ** PLUGINS **
  *************/
-FormBar.plugins = {};
-
-/** SOLID PLUGIN (DEFAULT PLUGIN) **/
-FormBar.plugins.solid = {
-    init: function(){
-      //Set color of bar as solid
-      var bar = this.getBar();      
-      bar.style.background = this.colors[0];        
-    },
-    update: function( ev ){
-        ev.bar.style.width = ev.percentage + "%";
-    }
-};
-
+vBar.plugins = {};
 
 
 /***************
  ** BEHAVIORS **
  ***************/
-
-FormBar.behaviors = {};
-
-
-
-/** PROGRESSBAR BEHAVIOR (DEFAULT BEHAVIOR)**/
-
-FormBar.behaviors.progressbar = {
-    init: function(){
-      this.value = this.value || 0;       
-      this.setValue = function( val ){
-      	this.value = val / 100;
-      	this._update( );
-      };
-    },
-    destroy: function(){
-    	delete this.setValue;
-    	delete this.value;
-    },
-    percentage: function(){
-    	return this.value;
-    }
-};
+vBar.behaviors = {};
 
 
 /************************
@@ -348,12 +313,12 @@ FormBar.behaviors.progressbar = {
  ************************/
 
 //Plugins
-FormBar.prototype.destroyPlugin = FormBar.util.noop;
-FormBar.prototype.initPlugin = FormBar.plugins.solid.init;
-FormBar.prototype.contentPlugin = null;
-FormBar.prototype.updatePlugin = FormBar.plugins.solid.update;
+vBar.prototype.destroyPlugin = vBar.util.noop;
+vBar.prototype.initPlugin = vBar.plugins.solid.init;
+vBar.prototype.contentPlugin = null;
+vBar.prototype.updatePlugin = vBar.plugins.solid.update;
 
 //Behaviors
-FormBar.prototype.initBehavior = FormBar.util.noop;
-FormBar.prototype.destroyBehavior = FormBar.util.noop;
-FormBar.prototype.getPercentageBehavior = FormBar.util.noop;		
+vBar.prototype.initBehavior = vBar.util.noop;
+vBar.prototype.destroyBehavior = vBar.util.noop;
+vBar.prototype.getPercentageBehavior = vBar.util.noop;		

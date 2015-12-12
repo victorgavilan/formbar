@@ -1,5 +1,5 @@
 /** FORM BAR BEHAVIOR **/
-FormBar.behaviors.formbar = {
+vBar.behaviors.formbar = {
     init: function( cfg ){
 
        //Form Html node containing the form we want observe
@@ -9,7 +9,7 @@ FormBar.behaviors.formbar = {
 
        //Event handler
        this.handleEvent = function(ev){
-					if ( FormBar.util.allowedField( ev.target ) ) {
+					if ( vBar.util.allowedField( ev.target ) ) {
         		this._update();
     			}
 			 };        
@@ -22,7 +22,7 @@ FormBar.behaviors.formbar = {
 
        for (var j = 0; j < elems.length; j++) {
          
-           if ( FormBar.util.allowedField( elems[j] ) ) {
+           if ( vBar.util.allowedField( elems[j] ) ) {
                this._formElements.push( elems[j] );
            }
        }

@@ -1,5 +1,5 @@
 /** TIMER BAR BEHAVIOR **/
-FormBar.behaviors.timerbar = {
+vBar.behaviors.timerbar = {
     init: function( cfg ){
       this._timerBehaviorTimerId = null;
       this._timerBehaviorTimerMax = (cfg.maxTime || 30) * 1000; //Max time

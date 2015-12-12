@@ -1,0 +1,1 @@
+vBar.plugins.sections={content:function(){for(var a=this.node.offsetWidth/this.colors.length,b='<div style="position: relative">',c=0;c<this.colors.length;++c)b+='<span style="display: inline-block; position: absolute; top: 0; left: '+a*c+"px; background: "+this.colors[c]+"; height: "+this.barHeight+"; width: "+a+'px"></span>';return b+="</div>"}};

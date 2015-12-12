@@ -1,4 +1,4 @@
-FormBar.plugins.chameleon = {
+vBar.plugins.chameleon = {
     init: function(){
 
         //Set color of bar as gradient

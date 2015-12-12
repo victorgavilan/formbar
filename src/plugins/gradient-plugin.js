@@ -1,4 +1,4 @@
-FormBar.plugins.gradient = {
+vBar.plugins.gradient = {
     init: function(){
 
         //Set color of bar as gradient

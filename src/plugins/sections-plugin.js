@@ -1,4 +1,4 @@
-FormBar.plugins.sections = {    
+vBar.plugins.sections = {    
     content: function (){
         var sectionWidth = this.node.offsetWidth / (this.colors.length),
             html = '<div style="position: relative">';

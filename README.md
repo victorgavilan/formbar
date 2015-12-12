@@ -1,9 +1,9 @@
-#FormBar.js
+#vBar.js
 
-Progress bar for form completion and more...
+Progress bar, timer bar, form completion bar...
 
 ##Usage
-Insert `formbar-min.js` in your web page.  Define the DOM element that will host your bar and that is all.
+Insert `vbar-min.js` in your web page.  Define the DOM element that will host your bar and that is all.
 
 ```html
 <body>
@@ -14,10 +14,10 @@ Insert `formbar-min.js` in your web page.  Define the DOM element that will host
     <input type="password" name="password" placeholder="Password">
   </form>
 
-  <script src="formbar-min.js"></script>
+  <script src="vbar-min.js"></script>
   <script>
       //Create the bar
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar'
       });
       
@@ -29,13 +29,13 @@ Insert `formbar-min.js` in your web page.  Define the DOM element that will host
 
 If you want to exclude a field add a class named `ignore` to it. 
 
-To keep formbar filesize small (>4k) `formbar-min.js` file only ships the **solid plugin**. To use another plugin insert **formbar-[pluginName]-min.js** file instead that contains **solid plugin** and the selected plugin. But if you think that you need all the plugins in your page then insert **formbar-all-min.js** file.
+To keep formbar filesize small (>4k) `vbar-min.js` file only ships the **solid plugin**. To use another plugin insert **vbar-[pluginName]-min.js** file instead that contains **solid plugin** and the selected plugin. But if you think that you need all the plugins in your page then insert **vbar-all-min.js** file.
 
 ##Configuration
-FormBar have many configuration options that makes easier fits it to your web page design. All this configuration options are accesible through your formBar object too.
+vBar have many configuration options that makes easier fits it to your web page design. All this configuration options are accesible through your vBar object too.
 
  ```javascript
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar',
         colors: ['#F00'],
         totalSteps: 3,
@@ -91,7 +91,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
 
  * [Solid](#)**(default)** - Draw a bar with only one color (the first color in the configuration **colors** array). This is the default option if you don't define any plugin in the configuration object.
  ```javascript
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar',
         colors: ['#F00'],
         plugin: 'solid' //optional. Solid is the default plugin
@@ -102,7 +102,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
  
  * [Dotted](#)- Same as **solid plugin** but it draws a dotted line instead.
  ```javascript
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar',
         colors: ['#F00'],
         plugin: 'dotted'
@@ -112,7 +112,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
  ```
  * [Dashed](#)- Same as **solid plugin** but it draws a dashed line instead. 
  ```javascript
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar',
         colors: ['#F00'],
         plugin: 'dashed'
@@ -123,7 +123,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
  
  * [Gradient](#) - Draw a bar with a gradient from **colors[0] to colors[1]**.
  ```javascript
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar',
         colors: ['#F00', '#500'],
         plugin: 'gradient'
@@ -135,7 +135,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
  
  * [Sections](#) Draw a bar with multiple sections with different color. Each section take a color from the configuration array colors. 
   ```javascript
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar',
         colors: ['#F00', '#0F0','#00F', '#0FF', '#FF0'],
         plugin: 'sections'
@@ -146,7 +146,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
 
  * [Chameleon](#) - Draw a bar with a solid color that change while it progress. Use all the colors provided by the configuration array colors.
   ```javascript
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar',
         colors: ['#F00', '#FF0', '#0FF'],
         plugin: 'chameleon'
@@ -157,7 +157,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
  
  * [Merge](#) - Create two opposite bars with one solid color that grows until they met at the middle. This plugins use colors[0] as the bar color and colors[1] as the mask color. The mask must be the same color as your page background. 
  ```javascript
-      var myBar = new FormBar({
+      var myBar = new vBar({
         node: '#mybar',
         colors: ['#F00', 'white'], //white background
         plugin: 'merge'
@@ -176,7 +176,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
  
 
 ##License
-FormBar.js is licensed under the BSD license (http://opensource.org/licenses/BSD-3-Clause)
+vBar.js is licensed under the BSD license (http://opensource.org/licenses/BSD-3-Clause)
 
 ##Acknowledgements
 [**Fort.js**](http://idriskhenchil.me/fort) To inspirate this project. 

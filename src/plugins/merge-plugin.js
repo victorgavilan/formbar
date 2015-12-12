@@ -1,4 +1,4 @@
-FormBar.plugins.merge = {
+vBar.plugins.merge = {
     content: '<div class="mask"></div>',
     init: function(){        
         //Set color of bar as gradient

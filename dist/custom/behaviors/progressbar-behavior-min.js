@@ -1,0 +1,1 @@
+vBar.behaviors.progressbar={init:function(){this.value=this.value||0,this.setValue=function(a){this.value=a/100,this._update()}},destroy:function(){delete this.setValue,delete this.value},percentage:function(){return this.value}};

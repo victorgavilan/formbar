@@ -1,4 +1,4 @@
-FormBar.plugins.dashed = {
+vBar.plugins.dashed = {
     init: function(){
         
         var bar = this.getBar();

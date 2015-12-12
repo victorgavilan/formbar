@@ -1,0 +1,1 @@
+vBar.plugins.chameleon={init:function(){var a=this.getBar();a.style.background=this.colors[0],this.chameleon_currentColor=null},update:function(a){var b=a.bar,c=this.chameleon_currentColor,d=a.percentage,e=0===d?0:Math.round(d/100*this.colors.length-1);b.style.width=d+"%",c!=e&&(this.chameleon_currentColor=e,b.style.background=this.colors[e])}};
