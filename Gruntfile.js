@@ -3,9 +3,9 @@ module.exports = function( grunt ){
   var plugins = ['chameleon', 'dashed', 'dotted', 'gradient', 'merge', 'sections'],
       behaviors = ['progressbar', 'formbar', 'timerbar'],
       outDir = 'dist',
-			core = outDir + '/custom/vbar-core-min.js',            
       createGroups = function( ){
       	var files = [],
+           	core = outDir + '/custom/vbar-core-min.js',            
             obj;
       	behaviors.forEach( function( behavior ){
       		plugins.forEach( function( plugin ){
@@ -13,7 +13,7 @@ module.exports = function( grunt ){
       			obj.src = [ 
       				core, 
       				outDir + '/custom/plugins/' + plugin + '-plugin-min.js',
-      				outDir + '/custom/behaviors/' + behavior + 'behavior-min.js'	
+      				outDir + '/custom/behaviors/' + behavior + '-behavior-min.js'	
       			];
       			
       			obj.dest = outDir + '/packages/' + behavior + '/vbar-'+ behavior + '-' + plugin + '-min.js';
@@ -27,7 +27,7 @@ module.exports = function( grunt ){
       mixAll = function(){
       	var files = [],
       	   	obj = {
-      	   		src: [],
+      	   		src: [ outDir + '/custom/vbar-core-min.js'],
       	   		dest: outDir + '/vbar-all-min.js'
       	   	};
       	   	
