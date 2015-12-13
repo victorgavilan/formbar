@@ -34,12 +34,13 @@
     
     var myBar = new vBar({
         node: '#Bar1',
-        barHeight: '25px',
+        barHeight: 25,
         colors:["#00F"], 
         plugin: 'solid',
         showText: true,
         textSize: 15,
-        textTop: 5,        
+        textPadding: 5,
+        textPosition: vBar.TEXTPOS_MIDDLE_CENTER,        
         showBorder: true,
  				behavior: 'timerbar',
  				timerInterval: 250,
@@ -50,14 +51,13 @@
 
     var myBar2 = new vBar({
         node: '#Bar2',
-        barHeight: '10px',
+        barHeight: 10,
         borderRadius: 50,
         colors:['#4CAE19', '#FFF'], 
         plugin: 'merge',
         showBorder: true,
         showText: true,
-        textAlign: 'right',
-        textTop: 12,
+        textPosition: vBar.TEXTPOS_BOTTOM_CENTER,        
  				behavior: 'timerbar',
  				timerInterval: 500,
  				maxTime: 10

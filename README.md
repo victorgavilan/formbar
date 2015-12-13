@@ -52,8 +52,9 @@ vBar have many configuration options that makes easier fits it to your web page 
 
 * **node:** (CSS Selector) DOM node where the bar will be redered.
 * **formNode:** (CSS Selector) Form DOM node container. (default: 'body' - observes all page forms fields)
-* **barHeight:** (CSS height unit) Bar height. You can pass a string with a CSS height unit or a number. If you pass a number it will represent the height in pixels.
+* **barHeight:** (Number) Bar height in pixels. 
 * **colors:** (Array of CSS colors) Example: `['#F00', '#0F0','#0FF']`. This colors are share by all plugins, see below the configuration of each plugin to know how it use this colors.
+**striped** (Boolean) Adds an striped effect to bar color (if plugin supports it).
 * **background:** (CSS background) A color or background CSS value. Sets de bar's background.
 
 ###Bar border options
@@ -99,6 +100,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
       
       myBar.render();
  ```
+   **Suports striped style**
  
  * [Dotted](#)- Same as **solid plugin** but it draws a dotted line instead.
  ```javascript
@@ -110,6 +112,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
       
       myBar.render();
  ```
+   
  * [Dashed](#)- Same as **solid plugin** but it draws a dashed line instead. 
  ```javascript
       var myBar = new vBar({
@@ -144,6 +147,8 @@ Then you can use the `nextStep()` method to increment currentStep one up.
       myBar.render();
  ```
 
+    **Suports striped style**
+
  * [Chameleon](#) - Draw a bar with a solid color that change while it progress. Use all the colors provided by the configuration array colors.
   ```javascript
       var myBar = new vBar({
@@ -154,6 +159,8 @@ Then you can use the `nextStep()` method to increment currentStep one up.
       
       myBar.render();
  ```
+
+    **Suports striped style**
  
  * [Merge](#) - Create two opposite bars with one solid color that grows until they met at the middle. This plugins use colors[0] as the bar color and colors[1] as the mask color. The mask must be the same color as your page background. 
  ```javascript
@@ -165,7 +172,7 @@ Then you can use the `nextStep()` method to increment currentStep one up.
       
       myBar.render();
  ```
-
+    **Suports striped style**
 
 ##Browser Support
  * Safari 7.0 

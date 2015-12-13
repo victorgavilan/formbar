@@ -19,6 +19,7 @@ function vBar( cfg ){
 
     //Color array share by all plugins
     this.colors = cfg.colors || ['#44F'];
+    this.striped = cfg.striped || false;
 
     //Multistep form configuration
     this.totalSteps = cfg.totalSteps || 1;
@@ -29,22 +30,49 @@ function vBar( cfg ){
     this.showBorder = cfg.showBorder || false;
     this.borderRadius = cfg.borderRadius || 5;
 
+    //Bar height configuration
+    this.barHeight = cfg.barHeight || '4';
+
     //Bar text configuration
     this.showText = cfg.showText || false;
-    this.textAlign = cfg.textAlign || 'center';
+    this.textPosition = cfg.textPosition || vBar.TEXTPOS_MIDDLE_CENTER;
+		this.textPadding = cfg.textPadding || 2;
     this.textPendingPercentage = cfg.textPendingPercentage || false;
     this.beforeText = cfg.beforeText || '';
     this.afterText = cfg.afterText ||'';
     this.textColors = cfg.textColors || ['black', 'white']; //-50% +50% colors
     this.textSize = cfg.textSize || '1em';
     if (typeof this.textSize == 'number') this.textSize += 'px';
-    this.textTop = cfg.textTop || '5px';
-    if (typeof this.textTop == 'number') this.textTop += 'px';
-    
-    //Bar height configuration
-    //Allow define the bar height by a number (translate it to pixels) or by a string (using any CSS unit)
-    if (cfg.barHeight && typeof cfg.barHeight === "number") cfg.barHeight +="px"; 
-    this.barHeight = cfg.barHeight || '4px';
+
+    switch ( this.textPosition){
+    	case vBar.TEXTPOS_TOP_LEFT:
+		    this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: left; bottom:'+ this.barHeight +'px';    		
+    		break;
+    	case vBar.TEXTPOS_TOP_CENTER:
+	    	this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: center; bottom:'+ this.barHeight +'px';    		
+    		break;
+    	case vBar.TEXTPOS_TOP_RIGHT:
+	    	this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: right; bottom:'+ this.barHeight +'px';    		
+    		break;
+     	case vBar.TEXTPOS_MIDDLE_LEFT:
+		    this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: left; top: 0px';    		
+    		break;
+    	case vBar.TEXTPOS_MIDDLE_CENTER:
+	    	this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: center; top: 0px';    		
+    		break;
+    	case vBar.TEXTPOS_MIDDLE_RIGHT:
+	    	this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: right; top: 0px';    		
+    		break;
+    	case vBar.TEXTPOS_BOTTOM_LEFT:
+		    this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: left; top:'+ this.barHeight +'px';    		
+    		break;
+    	case vBar.TEXTPOS_BOTTOM_CENTER:
+	    	this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: center; top:'+ this.barHeight +'px';    		
+    		break;
+    	case vBar.TEXTPOS_BOTTOM_RIGHT:
+	    	this._textPosition = 'padding: '+ this.textPadding +'px 0px; text-align: right; top:'+ this.barHeight +'px';    		
+    		break;
+    }
     
     //Bar background color
     this.node.style.background = cfg.background || 'transparent';
@@ -222,10 +250,10 @@ vBar.prototype.render = function() {
         
         
         //html bar DOM structure
-        dwrapper = '<div class="vbar-wrapper" style="position: relative; height: '+ this.barHeight + ';">';       
+        dwrapper = '<div class="vbar-wrapper" style="position: relative; height: '+ this.barHeight + 'px;">';       
         dbar = '<div class="vbar" style="position: relative; height: 100%; width:100%; overflow: hidden; '+ htmlborder + '">';
         dcontent = '<div class="vbar-content" style="height: 100%; overflow: hidden;transition: all 0.5s;">';     
-        dtext = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; top:'+ this.textTop +'; font-weight: bold; display:block; left: 0px; text-align: '+ this.textAlign +'; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '';
+        dtext = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; '+ this._textPosition +'; font-weight: bold; display:block; left: 0px; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '';
         
  
     if (this.contentPlugin) {
@@ -302,7 +330,21 @@ vBar.plugins = {};
  ***************/
 vBar.behaviors = {};
 
+/****************
+ ** CONSTANTES **
+ ****************/
+ vBar.TEXTPOS_TOP_RIGHT = 10;
+ vBar.TEXTPOS_TOP_CENTER = 11;
+ vBar.TEXTPOS_TOP_LEFT = 12;
+ 
+ vBar.TEXTPOS_MIDDLE_RIGHT = 0;
+ vBar.TEXTPOS_MIDDLE_CENTER = 1;
+ vBar.TEXTPOS_MIDDLE_LEFT = 2;
 
+ vBar.TEXTPOS_BOTTOM_RIGHT = -1;
+ vBar.TEXTPOS_BOTTOM_CENTER = -2;
+ vBar.TEXTPOS_BOTTOM_LEFT = -3;
+ 
 /************************
  ** EXTENSIONS METHODS **
  ************************/

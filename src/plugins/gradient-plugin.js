@@ -5,6 +5,7 @@ vBar.plugins.gradient = {
             gradient = 'linear-gradient( to right, ' + this.colors[0] + ', ' + this.colors[1] + ')';
 
         bar.style.background = gradient;
+
     }
 };
 

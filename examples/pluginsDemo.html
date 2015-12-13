@@ -59,8 +59,11 @@
 		<h2>Dotted</h2>
 		<div id="Bar7" class="bar"></div>
 
-		<h2>Striped</h2>
+		<h2>Solid striped style</h2>
 		<div id="Bar8" class="bar"></div>
+		
+		<h2>Sections striped style</h2>
+		<div id="Bar9" class="bar"></div>
 	</div>
 </div>
 
@@ -69,7 +72,7 @@
     
     var myBar = new vBar({
         node: '#Bar1',
-        barHeight: '10px',
+        barHeight: 10,
         colors:["#00F"], 
         plugin: 'solid',
         showBorder: true,
@@ -80,7 +83,7 @@
     
    var myBar2 = new vBar({
         node: '#Bar2',
-        barHeight: '10px',
+        barHeight: 10,
         borderRadius: 50,
         colors:['#4CAE19', '#FFF'], 
         plugin: 'merge',
@@ -92,7 +95,7 @@
 
 	 var myBar3 = new vBar({
         node: '#Bar3',
-        barHeight: '10px',
+        barHeight: 10,
         colors:["#F00", "#F50", "#FA0","#292"], 
         plugin: 'chameleon',
         showBorder: true,
@@ -103,7 +106,7 @@
 
 	 var myBar4 = new vBar({
         node: '#Bar4',
-        barHeight: '10px',
+        barHeight: 10,
 				colors:["#55F", "#CCF"], 
 				plugin: 'gradient',
 				showBorder: true,
@@ -114,7 +117,7 @@
     
 		var myBar5 = new vBar({
         node: '#Bar5',
-        barHeight: '10px',
+        barHeight: 10,
         borderRadius: 50,
         colors:["#F00", "#F50", "#FA0","#292"], 
         plugin: 'sections',
@@ -147,9 +150,23 @@
     
 		var myBar8 = new vBar({
         node: '#Bar8',
-        barHeight: '10px',
+        barHeight: 10,
         colors:["#AAF"], 
-        plugin: 'striped',
+        plugin: 'solid',
+        striped: true,
+        showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+
+		var myBar9 = new vBar({
+        node: '#Bar9',
+        barHeight: 10,
+        borderRadius: 50,
+        colors:["#F00", "#F50", "#FA0","#292"], 
+        plugin: 'sections',
+        striped: true,
         showBorder: true,
  				behavior: 'timerbar',
  				timerInterval: 500,
@@ -163,7 +180,8 @@
     myBar5.render();
     myBar6.render();
     myBar7.render();
-    myBar8.render();                    
+    myBar8.render();
+    myBar9.render();                                        
     
     var start = document.getElementById('start'),
         stop = document.getElementById('stop'),
@@ -178,6 +196,7 @@
 	    myBar6.start();
   	  myBar7.start();
   	  myBar8.start();
+  	  myBar9.start();
     });
 
     stop.addEventListener('click', function(){
@@ -188,7 +207,8 @@
     	myBar5.stop();    	    	    	
     	myBar6.stop();
     	myBar7.stop();
-    	myBar8.stop();    	    	
+    	myBar8.stop();
+    	myBar9.stop();    	    	
     });
     
     reset.addEventListener('click', function(){
@@ -199,7 +219,8 @@
     	myBar5.reset();    	    	    	
     	myBar6.reset();
     	myBar7.reset();    	    	    	
-    	myBar8.reset();    	    	    	
+    	myBar8.reset();
+    	myBar9.reset();    	    	    	
 
     });
     
