@@ -1,15 +1,15 @@
 <html>
   <head>
     <script src="lib/yuitest-min.js"></script>
-    <script src="../dist/formbar-all-min.js"></script>
+    <script src="../dist/vbar-all-min.js"></script>
   </head>
   <body>
     <div id="bar"></div>
     
     <script language="javascript">
       var Y = YUITest,
-          testSuite = new Y.TestSuite("FormBar Core Tests"),
-          formBar,
+          testSuite = new Y.TestSuite("vBar Core Tests"),
+          myBar,
           testCase;
      
      
@@ -17,36 +17,36 @@
           testCase = new Y.TestCase({
             name: 'Prueba de la configuracion por defecto',
             init: function(){
-				      formBar = new FormBar({
+				      myBar = new vBar({
 				        node: '#bar'            
 				      });
-				      formBar.render();
+				      myBar.render();
             },
             destroy: function(){
-	            formBar.destroy();
+	            myBar.destroy();
             },
             'getBar debe devolver el nodo del contenido de la barra': function(){
-              Y.Assert.areEqual( document.querySelector('.fpbar-content'), formBar.getBar());
+              Y.Assert.areEqual( document.querySelector('.vbar-content'), myBar.getBar());
             },
             'Se deben aplicar los valores por defecto': function(){
-            	Y.Assert.areEqual( '#44F', formBar.colors[0], 'colors[0] debe ser #44F');
-            	Y.Assert.areEqual( 1, formBar.currentStep, 'currentStep debe ser 1');
-            	Y.Assert.areEqual( 1, formBar.totalSteps, 'totalSteps debe ser 1');
-            	Y.Assert.areEqual( '#bbb', formBar.borderColor, 'borderColor debe ser #bbb');            	
-            	Y.Assert.areEqual( false, formBar.showBorder, 'showBorder debe ser false');
-							Y.Assert.areEqual( false, formBar.showText, 'showText debe ser false');
-            	Y.Assert.areEqual( false, formBar.textPendingPercentage, 'textPendingPercentage debe ser false');
-            	Y.Assert.areEqual( '', formBar.beforeText, 'beforeText debe ser una cadena vacia');
-            	Y.Assert.areEqual( '', formBar.afterText, 'afterText debe ser una cadena vacia');            	
-            	Y.ArrayAssert.containsItems( ['black', 'white'], formBar.textColors, 'textColors debe ser [black, white]');
-            	Y.Assert.areEqual( '1em', formBar.textSize, 'textSize debe ser 1em');
-            	Y.Assert.areEqual( '5px', formBar.textTop, 'textTop debe ser 5px');
-            	Y.Assert.areEqual( '4px', formBar.barHeight, 'barHeight debe ser 4px');
-            	Y.Assert.isTrue( formBar.node.style.background.indexOf('transparent') !== -1, 'background debe ser transparent'); 
+            	Y.Assert.areEqual( '#44F', myBar.colors[0], 'colors[0] debe ser #44F');
+            	Y.Assert.areEqual( 1, myBar.currentStep, 'currentStep debe ser 1');
+            	Y.Assert.areEqual( 1, myBar.totalSteps, 'totalSteps debe ser 1');
+            	Y.Assert.areEqual( '#bbb', myBar.borderColor, 'borderColor debe ser #bbb');            	
+            	Y.Assert.areEqual( false, myBar.showBorder, 'showBorder debe ser false');
+							Y.Assert.areEqual( false, myBar.showText, 'showText debe ser false');
+            	Y.Assert.areEqual( false, myBar.textPendingPercentage, 'textPendingPercentage debe ser false');
+            	Y.Assert.areEqual( '', myBar.beforeText, 'beforeText debe ser una cadena vacia');
+            	Y.Assert.areEqual( '', myBar.afterText, 'afterText debe ser una cadena vacia');            	
+            	Y.ArrayAssert.containsItems( ['black', 'white'], myBar.textColors, 'textColors debe ser [black, white]');
+            	Y.Assert.areEqual( '1em', myBar.textSize, 'textSize debe ser 1em');
+            	Y.Assert.areEqual( '5px', myBar.textTop, 'textTop debe ser 5px');
+            	Y.Assert.areEqual( '4px', myBar.barHeight, 'barHeight debe ser 4px');
+            	Y.Assert.isTrue( myBar.node.style.background.indexOf('transparent') !== -1, 'background debe ser transparent'); 
             },
             'Prueba del comportamiento por defecto progressbar': function(){
-              formBar.setValue(60);
-            	Y.Assert.areEqual( 60, formBar.getPercentage() );
+              myBar.setValue(60);
+            	Y.Assert.areEqual( 60, myBar.getPercentage() );
             }
           });      
           testSuite.add( testCase );
@@ -62,11 +62,11 @@
             	}
             },
             init: function(){
-            	formBar = new FormBar({
+            	myBar = new vBar({
 				        node: '#bar'            
 				      });
 				      
-				      FormBar.plugins.testplugin = {
+				      vBar.plugins.testplugin = {
 				      	init: function(){
 				      	  console.log('INIT TESTPLUGIN');
 				      	  console.log(this);
@@ -77,7 +77,7 @@
 				      	}
 				      };
 				      
-				      FormBar.behaviors.testbehavior = {
+				      vBar.behaviors.testbehavior = {
 				      	init: function(){
 				      		console.log('INIT BEHAVIOR');
 				      		this.testBehaviorLoaded = true;				      	
@@ -89,22 +89,22 @@
 				      
             },
             destroy: function(){
-              formBar.destroy();
+              myBar.destroy();
             },
             'setPlugin debe emitir un error si el plugin no existe': function(){
-              formBar.setPlugin('pluginInexistente');
+              myBar.setPlugin('pluginInexistente');
             },
             'setBehavior debe emitir un error si el behavior no existe': function(){
-              formBar.setBehavior('behaviorInexistente');
-              Y.Assert.isTrue( formBar.testBehaviorLoaded, 'Error al cargar el behavior' );
+              myBar.setBehavior('behaviorInexistente');
+              Y.Assert.isTrue( myBar.testBehaviorLoaded, 'Error al cargar el behavior' );
               
             },'setPlugin y setBehavior debe cargar el plugin y behavior indicado': function(){
-              formBar.setPlugin('testplugin');
-              formBar.setBehavior('testbehavior');              
-              formBar.initPlugin();
-              formBar.initBehavior();  
-              Y.Assert.isTrue( formBar.testPluginLoaded, 'Error al cargar el plugin' );
-              Y.Assert.isTrue( formBar.testBehaviorLoaded, 'Error al cargar el behavior' );              
+              myBar.setPlugin('testplugin');
+              myBar.setBehavior('testbehavior');              
+              myBar.initPlugin();
+              myBar.initBehavior();  
+              Y.Assert.isTrue( myBar.testPluginLoaded, 'Error al cargar el plugin' );
+              Y.Assert.isTrue( myBar.testBehaviorLoaded, 'Error al cargar el behavior' );              
             }          
           });      
 		      testSuite.add( testCase );
@@ -115,28 +115,28 @@
 		      testCase = new Y.TestCase({
             name: 'Prueba de los metodos render y destroy',
             init: function(){
-            	formBar = new FormBar({
+            	myBar = new vBar({
 				        node: '#bar'            
 				      });
             },
             'render debe mostrar la barra en el navegador': function(){
-              Y.Assert.isNull( formBar.node.querySelector('.fpbar') );
+              Y.Assert.isNull( myBar.node.querySelector('.vbar-wrapper') );
 
-							formBar.render();
-              formBar.setValue(60);
+							myBar.render();
+              myBar.setValue(60);
 
               this.wait( function(){
-                 Y.Assert.isNotNull( formBar.node.querySelector('.fpbar') );
+                 Y.Assert.isNotNull( myBar.node.querySelector('.vbar-wrapper') );
               }, 1000 );
             },
             destroy: function(){
-              formBar.destroy();
+              myBar.destroy();
             },
             'destroy debe eliminar la barra en el navegador': function(){
-              Y.Assert.isNotNull( formBar.node.querySelector('.fpbar'), 'No hay ninguna barra para eliminar por el nodo destroy' );
-              formBar.destroy();
+              Y.Assert.isNotNull( myBar.node.querySelector('.vbar-wrapper'), 'No hay ninguna barra para eliminar por el nodo destroy' );
+              myBar.destroy();
               this.wait( function(){
-                 Y.Assert.isNull( formBar.node.querySelector('.fpbar'), 'El método destroy no ha eliminado el nodo de la barra' );
+                 Y.Assert.isNull( myBar.node.querySelector('.vbar-wrapper'), 'El método destroy no ha eliminado el nodo de la barra' );
               }, 1000 );
             }
                       

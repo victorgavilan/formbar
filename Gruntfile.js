@@ -1,6 +1,6 @@
 module.exports = function( grunt ){
 
-  var plugins = ['chameleon', 'dashed', 'dotted', 'gradient', 'merge', 'sections'],
+  var plugins = ['chameleon', 'dashed', 'dotted', 'gradient', 'merge', 'sections', 'solid', 'striped'],
       behaviors = ['progressbar', 'formbar', 'timerbar'],
       outDir = 'dist',
       createGroups = function( ){
@@ -108,7 +108,7 @@ module.exports = function( grunt ){
   	watch: {
 			scripts: {
 				files: '**/*.js',
-				tasks: ['test'],
+				tasks: ['default'],
 			}
 		}
   });

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="vBar Plugins demo">
+<meta name="viewport" content="width=device-width">
+<title>TimerBehavior Demo</title>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+
+<style>
+  body{
+  	margin: 20px;
+  }
+  pre {
+    background: #EEE;
+    padding: 20px;
+    border: 1px solid #999;
+    display: inline-block;
+  }
+  .bar{
+    margin: 10px 50px;
+    width: 50%;
+  }
+  
+  h2 {
+  	margin: 30px 50px 0px 50px;
+  }
+  
+  
+</style>
+</head>
+<body>
+<h1>vBar Plugins demo</h1>
+  <button id="start" class="pure-button pure-button-primary">Start</button>
+  <button id="stop" class="pure-button pure-button-primary">Stop</button>
+  <button id="reset" class="pure-button pure-button-primary">Reset</button>
+
+<div class="pure-g">
+	<div class="pure-u-1-2">
+		<h2>Solid</h2>
+		<div id="Bar1" class="bar"></div>
+		
+		<h2>Merge</h2>
+		<div id="Bar2" class="bar"></div>
+
+		<h2>Chameleon</h2>
+		<div id="Bar3" class="bar"></div>
+
+		<h2>Gradient</h2>
+		<div id="Bar4" class="bar"></div>
+
+		<h2>Sections</h2>
+		<div id="Bar5" class="bar"></div>
+	</div>
+	<div class="pure-u-1-2">	
+		<h2>Dashed</h2>
+		<div id="Bar6" class="bar"></div>
+
+		<h2>Dotted</h2>
+		<div id="Bar7" class="bar"></div>
+
+		<h2>Striped</h2>
+		<div id="Bar8" class="bar"></div>
+	</div>
+</div>
+
+<script src="vbar-all-min.js"></script>
+<script>
+    
+    var myBar = new vBar({
+        node: '#Bar1',
+        barHeight: '10px',
+        colors:["#00F"], 
+        plugin: 'solid',
+        showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+    
+   var myBar2 = new vBar({
+        node: '#Bar2',
+        barHeight: '10px',
+        borderRadius: 50,
+        colors:['#4CAE19', '#FFF'], 
+        plugin: 'merge',
+        showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+
+	 var myBar3 = new vBar({
+        node: '#Bar3',
+        barHeight: '10px',
+        colors:["#F00", "#F50", "#FA0","#292"], 
+        plugin: 'chameleon',
+        showBorder: true,
+        behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+
+	 var myBar4 = new vBar({
+        node: '#Bar4',
+        barHeight: '10px',
+				colors:["#55F", "#CCF"], 
+				plugin: 'gradient',
+				showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+    
+		var myBar5 = new vBar({
+        node: '#Bar5',
+        barHeight: '10px',
+        borderRadius: 50,
+        colors:["#F00", "#F50", "#FA0","#292"], 
+        plugin: 'sections',
+        showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+    
+    var myBar6 = new vBar({
+        node: '#Bar6',
+        barHeight: '3px',
+        colors:["#00F"], 
+        plugin: 'dashed',
+        background: "#EEF",
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+		var myBar7 = new vBar({
+        node: '#Bar7',
+        barHeight: '3px',
+        colors:["#00F"], 
+        background: "#EEF",        
+        plugin: 'dotted',
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+    
+		var myBar8 = new vBar({
+        node: '#Bar8',
+        barHeight: '10px',
+        colors:["#AAF"], 
+        plugin: 'striped',
+        showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+
+    myBar.render(); 
+    myBar2.render();
+    myBar3.render();
+    myBar4.render();
+    myBar5.render();
+    myBar6.render();
+    myBar7.render();
+    myBar8.render();                    
+    
+    var start = document.getElementById('start'),
+        stop = document.getElementById('stop'),
+        reset = document.getElementById('reset');
+
+    start.addEventListener('click', function(){
+    	myBar.start();
+    	myBar2.start();
+    	myBar3.start();
+    	myBar4.start();
+    	myBar5.start();    	    	
+	    myBar6.start();
+  	  myBar7.start();
+  	  myBar8.start();
+    });
+
+    stop.addEventListener('click', function(){
+    	myBar.stop();
+    	myBar2.stop();
+    	myBar3.stop();
+    	myBar4.stop();
+    	myBar5.stop();    	    	    	
+    	myBar6.stop();
+    	myBar7.stop();
+    	myBar8.stop();    	    	
+    });
+    
+    reset.addEventListener('click', function(){
+    	myBar.reset();
+    	myBar2.reset();
+    	myBar3.reset();
+    	myBar4.reset();
+    	myBar5.reset();    	    	    	
+    	myBar6.reset();
+    	myBar7.reset();    	    	    	
+    	myBar8.reset();    	    	    	
+
+    });
+    
+</script>
+</body>
+</html>

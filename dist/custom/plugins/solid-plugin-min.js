@@ -1,1 +1,1 @@
-vBar.plugins.solid={init:function(){var a=this.getBar();a.style.background=this.colors[0]},update:function(a){a.bar.style.width=a.percentage+"%"}};
+vBar.plugins.solid={init:function(){var a=this.getBar();a.style.background=this.colors[0]}};

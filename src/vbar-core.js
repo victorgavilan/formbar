@@ -72,7 +72,7 @@ function vBar( cfg ){
 vBar.prototype.destroy = function(){
 		this.destroyPlugin();
     this.destroyBehavior();
-    this.node.removeChild( this.node.querySelector('.fpbar-wrapper') );    
+    this.node.removeChild( this.node.querySelector('.vbar-wrapper') );    
 };
 
 /**
@@ -82,7 +82,7 @@ vBar.prototype.destroy = function(){
 */
 
 vBar.prototype.getBar = function(){
-  if ( !this._barNode ) this._barNode = this.node.querySelector(".fpbar-content");
+  if ( !this._barNode ) this._barNode = this.node.querySelector(".vbar-content");
 	return this._barNode;  
 };
 
@@ -124,7 +124,7 @@ vBar.prototype.setPlugin = function (pluginName){
         this.contentPlugin = (vBar.plugins[ pluginName ].content) ? vBar.plugins[ pluginName ].content : null;
         this.initPlugin = (vBar.plugins[ pluginName ].init) ? vBar.plugins[ pluginName ].init : vBar.plugins.solid.init; //default init
 
-        this.updatePlugin = (vBar.plugins[ pluginName ].update) ? vBar.plugins[ pluginName ].update : vBar.plugins.solid.update; //default update
+        if (vBar.plugins[ pluginName ].update) this.updatePlugin = vBar.plugins[ pluginName ].update; //default update
         this.destroyPlugin = (vBar.plugins[ pluginName ].destroy) ? vBar.plugins[ pluginName ].destroy : vBar.util.noop;
     } else {
         throw new Error('There is not any \"'+ pluginName +'\" plugin registered');
@@ -212,37 +212,32 @@ vBar.prototype.render = function() {
     //Create the dom structure
     //Allow to pass a function or a string to generate the html content. 
     //The function must return an html string.
-    var fpbar,
-        fpwrapper,
-        fpborder,
-        fpcontent,
-        fptext,
+    var dbar,
+        dwrapper,
+        dcontent,
+        dtext,
         content = '',
         html,
         htmlborder = (this.showBorder) ? 'border: 1px solid ' + this.borderColor +'; border-radius:'+ this.borderRadius + 'px;': '';
         
         
         //html bar DOM structure
-        fpwrapper = '<div class="fpbar-wrapper" style="position: relative; height: '+ this.barHeight + ';">';       
-        fpborder = '<div class="fpbar-border" style="height: 100%; width:100%; overflow: hidden; '+ htmlborder + '">';
-        fpbar = '<div class="fpbar" style="position: relative; height: 100%; ">';
-        fpcontent = '<div class="fpbar-content" style="height: 100%; transition: all 0.5s;">';     
-        fptext = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; top:'+ this.textTop +'; font-weight: bold; display:block; left: 0px; text-align: '+ this.textAlign +'; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '';
+        dwrapper = '<div class="vbar-wrapper" style="position: relative; height: '+ this.barHeight + ';">';       
+        dbar = '<div class="vbar" style="position: relative; height: 100%; width:100%; overflow: hidden; '+ htmlborder + '">';
+        dcontent = '<div class="vbar-content" style="height: 100%; overflow: hidden;transition: all 0.5s;">';     
+        dtext = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; top:'+ this.textTop +'; font-weight: bold; display:block; left: 0px; text-align: '+ this.textAlign +'; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'"></span>' : '';
         
  
     if (this.contentPlugin) {
-        if (typeof this.content === "function") {
+        if (typeof this.contentPlugin === "function") {
             content = this.contentPlugin();
         } else {
             content = this.contentPlugin;       
         }
     }
-    html = fpwrapper + fpborder + fpbar + fpcontent + content + '</div></div></div>' + fptext + '</div>';
+    html = dwrapper + dbar + dcontent + content + '</div></div>' + dtext + '</div>';
     
-    
-    /*'<div class="fpbar" style="position: relative; height:'+ this.barHeight +'; overflow: hidden;'+ border +'"><div class="fpbar-content" style="position: relative; height:'+ this.barHeight +'; transition: all 1s;width:0px;">'+ content +'</div>' + text + '</div>';
-*/
-    
+          
     
     this.node.innerHTML = html;
 
@@ -314,9 +309,11 @@ vBar.behaviors = {};
 
 //Plugins
 vBar.prototype.destroyPlugin = vBar.util.noop;
-vBar.prototype.initPlugin = vBar.plugins.solid.init;
+vBar.prototype.initPlugin = vBar.util.noop;
 vBar.prototype.contentPlugin = null;
-vBar.prototype.updatePlugin = vBar.plugins.solid.update;
+vBar.prototype.updatePlugin = function( ev ){
+	ev.bar.style.width = ev.percentage + "%";
+};
 
 //Behaviors
 vBar.prototype.initBehavior = vBar.util.noop;
