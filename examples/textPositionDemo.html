@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="TextPosition Demo">
+<meta name="viewport" content="width=device-width">
+<title>TimerBehavior Demo</title>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+<style>
+  pre {
+    background: #EEE;
+    padding: 20px;
+    border: 1px solid #999;
+    display: inline-block;
+  }
+  .bar{
+    margin: 20px 0px;
+    width: 50%;
+  }
+  
+  .top .bar{
+    margin: 30px 0px;
+  }
+  h2 {
+  	margin: 50px 0px 0px 5px;
+  	color: #FFF;
+  	font-size: 0.9em;
+  	font-weight: bolder;
+  	padding: 5px 10px;
+  	border: 1px solid #444;
+  	background-color: #58B;
+  	display: inline-block;
+  	border-radius: 50px;
+  }
+  
+  .container{
+  	padding: 20px;
+  }
+  
+  .panel {
+  	margin: 30px 0px 0px 30px;
+  }
+</style>
+</head>
+<body>
+<div class="panel">
+<h1>Text position demo</h1>
+  <button id="start" class="pure-button pure-button-primary">Start</button>
+  <button id="stop" class="pure-button pure-button-primary">Stop</button>
+  <button id="reset" class="pure-button pure-button-primary">Reset</button>
+</div>
+<div class="pure-g">
+	<div class="pure-u-1-3">
+	<div class="container">  
+		<h2>MIDDLE_LEFT</h2>
+		<div id="Bar1" class="bar"></div>
+
+		<h2>MIDDLE_CENTER</h2>
+		<div id="Bar2" class="bar"></div>
+
+		<h2>MIDDLE_RIGHT</h2>
+		<div id="Bar3" class="bar"></div>
+	</div>
+	</div>
+	<div class="pure-u-1-3">
+	<div class="container top">  
+		<h2>TOP_LEFT</h2>
+		<div id="Bar4" class="bar"></div>
+
+		<h2>TOP_CENTER</h2>
+		<div id="Bar5" class="bar"></div>
+
+		<h2>TOP_RIGHT</h2>
+		<div id="Bar6" class="bar"></div>
+	</div>
+	</div>
+	<div class="pure-u-1-3">
+	<div class="container">  
+		<h2>BOTTOM_LEFT</h2>
+		<div id="Bar7" class="bar"></div>
+
+		<h2>BOTTOM_CENTER</h2>
+		<div id="Bar8" class="bar"></div>
+
+		<h2>BOTTOM_RIGHT</h2>
+		<div id="Bar9" class="bar"></div>
+	</div>
+	</div>
+</div>
+<script src="vbar-all-min.js"></script>
+<script>
+    
+    var myBar = new vBar({
+        node: '#Bar1',
+        barHeight: 25,
+        colors:["#00AEFF"], 
+        plugin: 'solid',
+        showText: true,
+        textSize: 15,
+        textPosition: vBar.TEXTPOS_MIDDLE_LEFT,        
+        showBorder: true,
+        borderColor: '#000',
+ 				behavior: 'timerbar',
+ 				timerInterval: 250,
+ 				maxTime: 5
+    });
+
+    var myBar2 = new vBar({
+        node: '#Bar2',
+        barHeight: 25,
+        colors:["#00AEFF"], 
+        plugin: 'solid',
+        borderColor: '#999',
+        showText: true,
+        beforeText: 'Completed: ',
+        textSize: 15,
+        textPosition: vBar.TEXTPOS_MIDDLE_CENTER,        
+        showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 250,
+ 				maxTime: 9
+    });
+
+    var myBar3 = new vBar({
+        node: '#Bar3',
+        barHeight: 25,
+        colors:["#00AEFF"], 
+        plugin: 'solid',
+        afterText: 'completed',
+        showText: true,
+        textSize: 15,
+        textPosition: vBar.TEXTPOS_MIDDLE_RIGHT,        
+        showBorder: true,
+ 				behavior: 'timerbar',
+ 				timerInterval: 250,
+ 				maxTime: 7,
+ 				striped: true
+    });
+
+    var myBar4 = new vBar({
+        node: '#Bar4',
+        barHeight: 10,
+        borderRadius: 50,
+        colors:['#4CAE19', '#FFF'], 
+        textColors: ['black', 'black'],
+        plugin: 'merge',
+        showBorder: true,
+        showText: true,
+        textPosition: vBar.TEXTPOS_TOP_LEFT,        
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+    
+    var myBar5 = new vBar({
+        node: '#Bar5',
+        barHeight: 10,
+        borderRadius: 50,
+        colors:['#4CAE19', '#FFF'], 
+        textColors: ['black', 'black'],
+        plugin: 'merge',
+        beforeText: 'Completed',
+        showBorder: true,
+        showText: true,
+        textPosition: vBar.TEXTPOS_TOP_CENTER,        
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 8,
+ 				striped: true
+    });
+    
+    
+    
+    var myBar6 = new vBar({
+        node: '#Bar6',
+        barHeight: 10,
+        borderRadius: 50,
+        colors:['#4CAE19', '#FFF'], 
+        textColors: ['black', 'black'],
+        plugin: 'merge',
+        afterText: 'completed',
+        showBorder: true,
+        showText: true,
+        textPosition: vBar.TEXTPOS_TOP_RIGHT,        
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 12
+    });
+    
+    var myBar7 = new vBar({
+        node: '#Bar7',
+        barHeight: 10,
+        borderRadius: 50,
+        colors:['#FE4C19', '#FFF'], 
+        textColors: ['black', 'black'],
+        plugin: 'solid',
+        showBorder: true,
+        showText: true,
+        textPosition: vBar.TEXTPOS_BOTTOM_LEFT,        
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 10
+    });
+    
+    var myBar8 = new vBar({
+        node: '#Bar8',
+        barHeight: 10,
+        borderRadius: 50,
+        colors:['#FE4C19', '#FFF'], 
+        textColors: ['black', 'black'],
+        plugin: 'solid',
+        beforeText: 'Done:',
+        showBorder: true,
+        showText: true,
+        textPosition: vBar.TEXTPOS_BOTTOM_CENTER,        
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 6,
+    });
+    
+    var myBar9 = new vBar({
+        node: '#Bar9',
+        barHeight: 10,
+        borderRadius: 50,
+        colors:['#FE4C19', '#FFF'], 
+        textColors: ['black', 'black'],
+        plugin: 'solid',
+        afterText: 'progress.',
+        showBorder: true,
+        showText: true,
+        textPosition: vBar.TEXTPOS_BOTTOM_RIGHT,        
+ 				behavior: 'timerbar',
+ 				timerInterval: 500,
+ 				maxTime: 12,
+ 				striped: true
+    });
+    
+    myBar.render();
+    myBar2.render();
+    myBar3.render();
+    myBar4.render();
+    myBar5.render();
+    myBar6.render();
+    myBar7.render();
+    myBar8.render();
+    myBar9.render();
+    
+    var start = document.getElementById('start'),
+        stop = document.getElementById('stop'),
+        reset = document.getElementById('reset');
+
+    start.addEventListener('click', function(){
+    	myBar.start();
+    	myBar2.start();
+    	myBar3.start();
+    	myBar4.start();
+    	myBar5.start();
+    	myBar6.start();
+    	myBar7.start();
+    	myBar8.start();
+    	myBar9.start();
+    });
+
+    stop.addEventListener('click', function(){
+    	myBar.stop();
+    	myBar2.stop();
+    	myBar3.stop();
+    	myBar4.stop();
+    	myBar5.stop();
+    	myBar6.stop();
+    	myBar7.stop();
+    	myBar8.stop();
+    	myBar9.stop();
+    });
+    
+    reset.addEventListener('click', function(){
+    	myBar.reset();
+    	myBar2.reset();
+    	myBar3.reset();
+    	myBar4.reset();
+    	myBar5.reset();
+    	myBar6.reset();
+    	myBar7.reset();
+    	myBar8.reset();
+    	myBar9.reset();
+    });
+    
+    
+    
+</script>
+</body>
+</html>

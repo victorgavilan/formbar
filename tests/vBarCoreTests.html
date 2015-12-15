@@ -40,8 +40,7 @@
             	Y.Assert.areEqual( '', myBar.afterText, 'afterText debe ser una cadena vacia');            	
             	Y.ArrayAssert.containsItems( ['black', 'white'], myBar.textColors, 'textColors debe ser [black, white]');
             	Y.Assert.areEqual( '1em', myBar.textSize, 'textSize debe ser 1em');
-            	Y.Assert.areEqual( '5px', myBar.textTop, 'textTop debe ser 5px');
-            	Y.Assert.areEqual( '4px', myBar.barHeight, 'barHeight debe ser 4px');
+            	Y.Assert.areEqual( '4', myBar.barHeight, 'barHeight debe ser 4');
             	Y.Assert.isTrue( myBar.node.style.background.indexOf('transparent') !== -1, 'background debe ser transparent'); 
             },
             'Prueba del comportamiento por defecto progressbar': function(){

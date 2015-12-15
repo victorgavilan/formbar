@@ -69,7 +69,18 @@ vBar have many configuration options that makes easier fits it to your web page 
 * **beforeText:** (String) Text to show before the percentage number.
 * **afterText:** (String) Text to show after the percentage number.
 * **textSize:** (CSS size) Text size. If you pass a number it will represent the size in pixels. 
-* **textTop:** (CSS size) Text top position. If you pass a number it will represent the value in pixels. 
+* **textPosition:** (Number) Defines the text position at the bar. 
+    Values: 
+    * vBar.TEXTPOS_BOTTOM_CENTER. 
+    * vBar.TEXTPOS_BOTTOM_LEFT.
+    * vBar.TEXTPOS_BOTTOM_RIGHT.
+    * vBar.TEXTPOS_MIDDLE_CENTER. 
+    * vBar.TEXTPOS_MIDDLE_LEFT.
+    * vBar.TEXTPOS_MIDDLE_RIGHT.
+    * vBar.TEXTPOS_TOP_CENTER. 
+    * vBar.TEXTPOS_TOP_LEFT.
+    * vBar.TEXTPOS_TOP_RIGHT.        
+* **textPadding:** (String CSS padding value) Text element padding. If you don't like where the text is positioned adjust it using this value.
 * **textColors:** (CSS Color) Text color.
 
 ###MultiStep forms
