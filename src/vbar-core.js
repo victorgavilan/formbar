@@ -1,5 +1,9 @@
+
 function vBar( cfg ){
 
+		//Save configuration object to be used by plugins and behaviors
+    this.config = cfg;
+    
     //container node
     this.node = document.querySelector(cfg.node);
     
@@ -30,8 +34,9 @@ function vBar( cfg ){
     this.showBorder = cfg.showBorder || false;
     this.borderRadius = cfg.borderRadius || 5;
 
-    //Bar height configuration
+    //Bar height and color configuration
     this.barHeight = cfg.barHeight || '4';
+    this.background = cfg.background || 'white';
 
     //Bar text configuration
     this.showText = cfg.showText || false;
@@ -77,10 +82,7 @@ function vBar( cfg ){
 	    	this._textPosition = 'padding: '+ this.textPadding +'; text-align: right; top:'+ this.barHeight +'px; right: 0px;';    		
     		break;
     }
-    
-    //Bar background color
-    this.node.style.background = cfg.background || 'transparent';
-
+        
     //Internal use variables
     this._barNode = null; //Bar html node reference
     this._currentPercentage = null;
@@ -94,6 +96,9 @@ function vBar( cfg ){
     //Set the bar plugin
     var plugin = cfg.plugin || 'solid';
     this.setPlugin( plugin );
+
+    //Set the effects
+    this.effects = cfg.effects || [];
 }
 
 
@@ -150,18 +155,19 @@ vBar.prototype.setPlugin = function (pluginName){
 
     if ( pluginName in vBar.plugins ){
         //Destroy phase previous plugin
-        this.destroyPlugin(); 
+        if (this.destroyPlugin) this.destroyPlugin(); 
 
         //Load new plugin
-        this.contentPlugin = (vBar.plugins[ pluginName ].content) ? vBar.plugins[ pluginName ].content : null;
-        this.initPlugin = (vBar.plugins[ pluginName ].init) ? vBar.plugins[ pluginName ].init : vBar.plugins.solid.init; //default init
+        this.contentPlugin = (vBar.plugins[ pluginName ].content) ? vBar.plugins[ pluginName ].content : vBar.plugins.defaults.content;
+        this.initPlugin = (vBar.plugins[ pluginName ].init) ? vBar.plugins[ pluginName ].init : vBar.plugins.defaults.init; //default init
 
-        if (vBar.plugins[ pluginName ].update) this.updatePlugin = vBar.plugins[ pluginName ].update; //default update
-        this.destroyPlugin = (vBar.plugins[ pluginName ].destroy) ? vBar.plugins[ pluginName ].destroy : vBar.util.noop;
+        this.updatePlugin = (vBar.plugins[ pluginName ].update) ? vBar.plugins[ pluginName ].update : vBar.plugins.defaults.update; //default update
+        this.destroyPlugin = (vBar.plugins[ pluginName ].destroy) ? vBar.plugins[ pluginName ].destroy : vBar.plugins.defaults.destroy;
     } else {
         throw new Error('There is not any \"'+ pluginName +'\" plugin registered');
     }
 };
+
 
 
 /**
@@ -174,9 +180,12 @@ vBar.prototype.setBehavior = function (behaviorName){
     behaviorName = behaviorName.toLowerCase();
 
     if ( behaviorName in vBar.behaviors ){
-         this.initBehavior = (vBar.behaviors[ behaviorName ].init ) ? vBar.behaviors[ behaviorName ].init : vBar.util.noop;
-         this.destroyBehavior = (vBar.behaviors[ behaviorName ].destroy) ? vBar.behaviors[ behaviorName ].destroy : vBar.util.noop;
-         this.getPercentageBehavior = (vBar.behaviors[ behaviorName ].percentage) ? vBar.behaviors[ behaviorName ].percentage : vBar.util.noop;
+        //Destroy previous behavior
+		    if (this.destroyBehavior) this.destroyBehavior(); 
+    
+        this.initBehavior = (vBar.behaviors[ behaviorName ].init ) ? vBar.behaviors[ behaviorName ].init : vBar.behaviors.defaults.init;
+        this.destroyBehavior = (vBar.behaviors[ behaviorName ].destroy) ? vBar.behaviors[ behaviorName ].destroy : vBar.behaviors.defaults.destroy;
+        this.getPercentageBehavior = (vBar.behaviors[ behaviorName ].percentage) ? vBar.behaviors[ behaviorName ].percentage : vBar.behaviors.defaults.percentage;
     } else {
         throw new Error('There is not any \"'+ behaviorName +'\" behavior registered');
     }
@@ -211,7 +220,7 @@ vBar.prototype._update = function( ) {
     }
     
     this.updatePlugin( {bar: bar, percentage: percentage} );
-
+    this.callEffectsMethod('update', {bar: bar, percentage: percentage});
 
     //Change text color if percentage > 50
     if (this.showText) {
@@ -258,7 +267,7 @@ vBar.prototype.render = function() {
         
         //html bar DOM structure
         dwrapper = '<div class="vbar-wrapper" style="position: relative; height: '+ this.barHeight + 'px;">';       
-        dbar = '<div class="vbar" style="position: relative; height: 100%; width:100%; overflow: hidden; '+ htmlborder + '">';
+        dbar = '<div class="vbar" style="position: relative; height: 100%; width:100%; overflow: hidden; background-color:'+ this.background +'; '+ htmlborder + '">';
         dcontent = '<div class="vbar-content" style="height: 100%; overflow: hidden;transition: all 0.5s;">';     
         dtext = (this.showText) ? '<span class="text" style="position: absolute; transition: color 0.5s; '+ this._textPosition +'; font-weight: bold; display:block; width:'+ this.node.offsetWidth +'px; font-size: '+ this.textSize +'; color: '+ this._currentTextColor +'; '+ htmlMiddleText +'"></span>' : '';
         
@@ -279,9 +288,12 @@ vBar.prototype.render = function() {
     //Do de initialization
     this.initPlugin();
 
+    //Init the effects
+    this.callEffectsMethod('init');
+
     //Update the plugin state
     this._update();
-    
+
     //Replace render behavior
     //Render will be call only once
     this.render = function(){
@@ -289,6 +301,17 @@ vBar.prototype.render = function() {
     };
 };
 
+/*************
+ ** EFFECTS **
+ *************/
+ vBar.effects = {};
+
+//Function used to call a method of all instance applied effects
+vBar.prototype.callEffectsMethod = function( method, extraData ){
+	this.effects.forEach( function(fx){
+		if ( vBar.effects[fx] && vBar.effects[fx][method] ) vBar.effects[fx][method].call( this, extraData );
+	}, this);
+};
 
 
 /***************
@@ -356,15 +379,35 @@ vBar.behaviors = {};
  ** EXTENSIONS METHODS **
  ************************/
 
-//Plugins
-vBar.prototype.destroyPlugin = vBar.util.noop;
-vBar.prototype.initPlugin = vBar.util.noop;
+//Plugins handles
+vBar.prototype.destroyPlugin = null;
+vBar.prototype.initPlugin = null;
 vBar.prototype.contentPlugin = null;
-vBar.prototype.updatePlugin = function( ev ){
-	ev.bar.style.width = ev.percentage + "%";
+vBar.prototype.updatePlugin = null;
+
+//Default plugin values
+vBar.plugins.defaults = {
+	content: null,
+	init: function(){
+		//Set color of bar as solid
+		var bar = this.getBar();      
+		bar.style.background = this.colors[0];        
+	},
+	update: function( ev ){
+		ev.bar.style.width = ev.percentage + "%";
+	},
+	destroy: vBar.util.noop
 };
 
-//Behaviors
-vBar.prototype.initBehavior = vBar.util.noop;
-vBar.prototype.destroyBehavior = vBar.util.noop;
-vBar.prototype.getPercentageBehavior = vBar.util.noop;		
+//Behaviors handles
+vBar.prototype.initBehavior = null;
+vBar.prototype.destroyBehavior = null;
+vBar.prototype.getPercentageBehavior = null;		
+
+//Behaviors defaults
+vBar.behaviors.defaults = {
+	init: vBar.util.noop,
+	percentage: vBar.util.noop,
+	destroy: vBar.util.noop
+};
+

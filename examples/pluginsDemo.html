@@ -56,9 +56,6 @@
 		<h2>Dashed</h2>
 		<div id="Bar6" class="bar"></div>
 
-		<h2>Dotted</h2>
-		<div id="Bar7" class="bar"></div>
-
 		<h2>Solid striped style</h2>
 		<div id="Bar8" class="bar"></div>
 		
@@ -68,6 +65,15 @@
 </div>
 
 <script src="vbar-all-min.js"></script>
+<!--
+<script src="../src/vbar-core.js"></script>
+<script src="../src/plugins/solid-plugin.js"></script>
+<script src="../src/plugins/sections-plugin.js"></script>
+<script src="../src/behaviors/timerbar-behavior.js"></script>
+<script src="../src/effects/striped-effect.js"></script>
+<script src="../src/effects/gradient-effect.js"></script>
+<script src="../src/effects/chameleon-effect.js"></script>
+-->
 <script>
     
     var myBar = new vBar({
@@ -85,7 +91,7 @@
         node: '#Bar2',
         barHeight: 10,
         borderRadius: 50,
-        colors:['#4CAE19', '#FFF'], 
+        colors:['#FFF','#4CAE19' ], 
         plugin: 'merge',
         showBorder: true,
  				behavior: 'timerbar',
@@ -96,8 +102,10 @@
 	 var myBar3 = new vBar({
         node: '#Bar3',
         barHeight: 10,
-        colors:["#F00", "#F50", "#FA0","#292"], 
-        plugin: 'chameleon',
+        colors:["#F00", "#F50", "#FA0","#292"],
+        colorPercentages:[10,30,70,90], 
+        plugin: 'solid',
+        effects: ['chameleon'],
         showBorder: true,
         behavior: 'timerbar',
  				timerInterval: 500,
@@ -108,7 +116,8 @@
         node: '#Bar4',
         barHeight: 10,
 				colors:["#55F", "#CCF"], 
-				plugin: 'gradient',
+				plugin: 'solid',
+				effects: ['gradient'],
 				showBorder: true,
  				behavior: 'timerbar',
  				timerInterval: 500,
@@ -129,31 +138,24 @@
     
     var myBar6 = new vBar({
         node: '#Bar6',
-        barHeight: '3px',
-        colors:["#00F"], 
+        barHeight: '10',
+        colors:["#5F5"],
+        dashWidth: 4,
+        dashSeparation: 4, 
         plugin: 'dashed',
-        background: "#EEF",
+        background: "#222",
+        showBorder: true,
  				behavior: 'timerbar',
  				timerInterval: 500,
  				maxTime: 10
     });
-		var myBar7 = new vBar({
-        node: '#Bar7',
-        barHeight: '3px',
-        colors:["#00F"], 
-        background: "#EEF",        
-        plugin: 'dotted',
- 				behavior: 'timerbar',
- 				timerInterval: 500,
- 				maxTime: 10
-    });
-    
+		
 		var myBar8 = new vBar({
         node: '#Bar8',
         barHeight: 10,
         colors:["#AAF"], 
         plugin: 'solid',
-        striped: true,
+        effects: ['striped'],
         showBorder: true,
  				behavior: 'timerbar',
  				timerInterval: 500,
@@ -166,7 +168,7 @@
         borderRadius: 50,
         colors:["#F00", "#F50", "#FA0","#292"], 
         plugin: 'sections',
-        striped: true,
+        effects: ['striped'],
         showBorder: true,
  				behavior: 'timerbar',
  				timerInterval: 500,
@@ -179,22 +181,20 @@
     myBar4.render();
     myBar5.render();
     myBar6.render();
-    myBar7.render();
     myBar8.render();
     myBar9.render();                                        
-    
+
     var start = document.getElementById('start'),
         stop = document.getElementById('stop'),
         reset = document.getElementById('reset');
 
     start.addEventListener('click', function(){
     	myBar.start();
-    	myBar2.start();
-    	myBar3.start();
+     	myBar2.start();
+     	myBar3.start();
     	myBar4.start();
     	myBar5.start();    	    	
 	    myBar6.start();
-  	  myBar7.start();
   	  myBar8.start();
   	  myBar9.start();
     });
@@ -206,7 +206,6 @@
     	myBar4.stop();
     	myBar5.stop();    	    	    	
     	myBar6.stop();
-    	myBar7.stop();
     	myBar8.stop();
     	myBar9.stop();    	    	
     });
@@ -218,7 +217,6 @@
     	myBar4.reset();
     	myBar5.reset();    	    	    	
     	myBar6.reset();
-    	myBar7.reset();    	    	    	
     	myBar8.reset();
     	myBar9.reset();    	    	    	
 

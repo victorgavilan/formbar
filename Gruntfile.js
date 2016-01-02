@@ -1,7 +1,8 @@
 module.exports = function( grunt ){
 
-  var plugins = ['chameleon', 'dashed', 'dotted', 'gradient', 'merge', 'sections', 'solid'],
+  var plugins = ['dashed', 'merge', 'sections', 'solid'],
       behaviors = ['progressbar', 'formbar', 'timerbar'],
+      effects = ['chameleon', 'striped', 'gradient'],
       outDir = 'dist',
       createGroups = function( ){
       	var files = [],
@@ -39,6 +40,10 @@ module.exports = function( grunt ){
       		obj.src.push( outDir + '/custom/behaviors/' + behavior + '-behavior-min.js');
       	});
       	
+      	effects.forEach( function( effect ){
+      		obj.src.push( outDir + '/custom/effects/' + effect + '-effect-min.js');
+      	});
+      	      	
       	return obj;      	
       };
 
@@ -46,7 +51,7 @@ module.exports = function( grunt ){
     
     clean: {
     	dist: ['dist'],
-    	tempDir: ['dist/plugins', 'dist/behaviors']
+    	tempDir: ['dist/plugins', 'dist/behaviors', 'dist/effects']
     	
     },
     uglify: {
@@ -63,7 +68,7 @@ module.exports = function( grunt ){
     mkdir:{
 		  all: {
 		    options: {
-		      create: ['dist/custom', 'dist/custom/plugins', 'dist/custom/behaviors']
+		      create: ['dist/custom', 'dist/custom/plugins', 'dist/custom/behaviors', 'dist/custom/effects']
 		    }
 		  }
     },
@@ -73,7 +78,7 @@ module.exports = function( grunt ){
 		  	files: [{
 		        expand: true,
 		        cwd: 'dist/',
-		        src: ['plugins/*.js', 'behaviors/*.js', 'vbar-core-min.js'],        
+		        src: ['effects/*.js', 'plugins/*.js', 'behaviors/*.js', 'vbar-core-min.js'],        
 		        dest: 'dist/custom/'
 		      }]
 			}
@@ -88,7 +93,7 @@ module.exports = function( grunt ){
       },
       allInOneFile: {
         files: [ mixAll() ]
-      }      
+      }            
     },
     copy: {
       example: {
@@ -102,6 +107,9 @@ module.exports = function( grunt ){
   		},
   		behaviors: {
   			src: ['src/behaviors/*.js']
+  		},
+  		effects: {
+  			src: ['src/effects/*.js']
   		},
   		core: 'src/vbar-core.js'
   	},

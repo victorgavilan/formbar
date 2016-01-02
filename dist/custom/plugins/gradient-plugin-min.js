@@ -1,1 +1,0 @@
-vBar.plugins.gradient={init:function(){var a=this.getBar(),b="linear-gradient( to right, "+this.colors[0]+", "+this.colors[1]+")";a.style.background=b}};

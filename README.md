@@ -54,6 +54,7 @@ vBar have many configuration options that makes easier fits it to your web page 
 * **formNode:** (CSS Selector) Form DOM node container. (default: 'body' - observes all page forms fields)
 * **barHeight:** (Number) Bar height in pixels. 
 * **colors:** (Array of CSS colors) Example: `['#F00', '#0F0','#0FF']`. This colors are share by all plugins, see below the configuration of each plugin to know how it use this colors.
+* **colorPercentages:** [Array] Used by some plugins to apply diferent colors in a progress bar at those percentages. It sets the change color points. Example: [10,20,70] will use the first color in the colors array form 0% to 10%, the second from 10% to 20% and the third from 20% to 100% 
 **striped** (Boolean) Adds an striped effect to bar color (if plugin supports it).
 * **background:** (CSS background) A color or background CSS value. Sets de bar's background.
 
@@ -113,18 +114,8 @@ Then you can use the `nextStep()` method to increment currentStep one up.
  ```
    **Suports striped style**
  
- * [Dotted](#)- Same as **solid plugin** but it draws a dotted line instead.
- ```javascript
-      var myBar = new vBar({
-        node: '#mybar',
-        colors: ['#F00'],
-        plugin: 'dotted'
-      });
-      
-      myBar.render();
- ```
-   
- * [Dashed](#)- Same as **solid plugin** but it draws a dashed line instead. 
+ 
+ * [Dashed](#)- Same as **solid plugin** but it draws a dashed line instead. You can specify the width and separation between lines. 
  ```javascript
       var myBar = new vBar({
         node: '#mybar',
